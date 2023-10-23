@@ -193,6 +193,13 @@ public class Book {
     }
 
     /**
+     * Renews the book resetting the number of days until due back to it's max loan time
+     */
+    public void renew() {
+        daysTilDue = maxLoanTime;
+    }
+
+    /**
      *
      */
     public void passDays(int days) {

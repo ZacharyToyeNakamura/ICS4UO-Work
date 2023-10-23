@@ -11,7 +11,7 @@ public class BookTest {
         System.out.println(b3);
         System.out.println(b4);
         System.out.println(b5);
-        System.out.println(b1.getDaysTilDue() + " " + b1.getBorrowerID());
+
 
         System.out.println("Does b1 come before b2 lexicographically (author's lastname)? " + b1.compareLex(b2));
         System.out.println("Does b2 come before b4 lexicographically (author's lastname)? " + b2.compareLex(b4));
@@ -43,6 +43,23 @@ public class BookTest {
         b1.returnBook();
         System.out.println(b1);
 
+        System.out.println("\n1234567 borrows b2, but the max loan time is set to 7 days");
+        b2.borrow(1234567, 7);
+        System.out.println(b2);
+        System.out.println("\nSimulate the passing of 16 days for book 2");
+        b2.passDays(16);
+        System.out.println(b2);
+        System.out.println("Is b2 overdue? " + b2.isOverdue());
+        System.out.println("Days until b2 is due " + b2.getDaysTilDue());
+        System.out.println("1234567 renews b2");
+        b2.renew();
+        System.out.println(b2);
+        System.out.println("\nSimulate the passing of 7 days for book 2");
+        b2.passDays(7);
+        System.out.println(b2);
+        System.out.println("\nIs b2 overdue? " + b2.isOverdue());
+        System.out.println("1234567 returns b2");
+        b2.returnBook();
 
 
 
@@ -64,6 +81,6 @@ public class BookTest {
         System.out.println();
         Book.printLibrary(test);
 
-
+        // How do I write a ab tree?
     }
 }
