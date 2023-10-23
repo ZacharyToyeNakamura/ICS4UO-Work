@@ -1,0 +1,30 @@
+C:\Users\335183208\.jdks\openjdk-21\bin\java.exe "-javaagent:C:\Program Files (x86)\JetBrains\IntelliJ IDEA Community Edition 2023.1.4\lib\idea_rt.jar=63268:C:\Program Files (x86)\JetBrains\IntelliJ IDEA Community Edition 2023.1.4\bin" -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -classpath C:\Users\335183208\IdeaProjects\Circles\out\production\Circles Circles
+c1:
+Circle: centre at (4.0, -1.0) and radius 6.0
+(x - 4.0)² + (y + 1.0)² = 36.0
+
+c2:
+Circle: centre at (3.0, 2.0) and radius 2.0
+(x - 3.0)² + (y - 2.0)² = 4.0
+
+Radius of c1: 6.00 units
+Diameter of c1: 12.00 units
+Circumference of c1: 37.70 units
+Area of c1: 113.10 units²
+
+Smaller of c1 and c2: Circle: centre at (3.0, 2.0) and radius 2.0
+
+More circles...
+c3: (x - 4.0)² + (y + 1.0)² = 36.0
+c4: (x - 4.0)² + (y + 1.0)² = 36.0
+c5: (x - 0.0)² + (y - 0.0)² = 1.0
+
+Is c2 entirely inside c1? true
+Is c5 entirely inside c4? false
+
+smaller == c2? true
+c1 == c3? true
+c1 == c4? false
+c1 equivalent to c4? true
+
+Process finished with exit code 0
