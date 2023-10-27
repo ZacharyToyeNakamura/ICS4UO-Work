@@ -130,11 +130,11 @@ public class Employee {
      */
     @Override
     public String toString() {
-        return  "Employee Information: "+
+        return  "\nEmployee Information:"+
                 "\n Name: " + name +
                 "\n ID: " + id +
                 "\n Salary: $" + salary +
-                "\n Sick Days: " + sickDays + "\n"; // your code here
+                "\n Sick Days: " + sickDays; // your code here
     }
 
 }

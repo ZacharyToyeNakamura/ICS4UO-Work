@@ -60,7 +60,7 @@ public class Employees {
             return;
         }
         employees.remove(e);
-        System.out.println("Employee " + nameOrID + " has been removed.");
+        System.out.println("Employee " + e.getName() + " has been removed.");
     }
 
 
@@ -102,7 +102,7 @@ public class Employees {
             return;
         }
         e.setSalary(e.getSalary() + amount);
-        System.out.println(nameOrID + " new salary: $"+e.getSalary());
+        System.out.println(e.getName() + " new salary: $"+e.getSalary());
     }
 
 
@@ -116,10 +116,10 @@ public class Employees {
         String output = "Employees:\n" +
                         "[\n";
         for (Employee e : employees) {
-            output += e.toString();
-            output = output.substring(0,output.length()-1) + ",\n";
+            output += e.toString().substring(1);
+            output += ", \n";
         }
-        output = output.substring(0,output.length()-2) + "]";
+        output = output.substring(0,output.length()-3) + "]";
         return output; // your code here
     }
 
