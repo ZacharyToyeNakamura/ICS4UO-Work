@@ -30,6 +30,7 @@ public class Main {
         System.out.println("c5 scaled by a factor of 3.4: " + c5);
         c4.scale(374.7654);
         System.out.println("c4 scaled by a factor of 374.7654: " + c4);
+        System.out.println("The real part of c4 is " + c4.getRe());
 
         System.out.println("\nMagnitude of c1: " + c1.abs());
         System.out.println("Magnitude of c2: " + c2.abs());

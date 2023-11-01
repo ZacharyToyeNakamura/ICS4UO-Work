@@ -44,6 +44,7 @@ public class Complex {
     }
 
     // h
+    // Scales the complex number by a factor (multiply both parts of it by the factor)
     public void scale(double factor) {
         im *= factor;
         re *= factor;
