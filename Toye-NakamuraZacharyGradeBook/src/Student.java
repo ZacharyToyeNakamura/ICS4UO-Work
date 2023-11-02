@@ -41,17 +41,17 @@ public class Student {
      *
      * @param idx A integer number
      * @param mark An integer number between [-1, 100] (with -1 meaning no mark)
-     * @return 0 if it successfully set the mark, -1 if not
+     * @return 0 if it successfully set the mark, -2 if not
      */
     public int setMark(int idx, int mark) {
         if(idx < 0 || idx >= marks.size()) {
-            return -1;
+            return -2;
         }
         marks.set(idx, mark);
         return 0;
     }
 
-    /**
+    /** MAYBE DELETE
      * Returns the student's mark for the idx th assignment, and -1 if out of bounds
      *
      * @param idx An integer in [0 - marks.size())
@@ -66,17 +66,44 @@ public class Student {
     }
 
     /**
+     * Adds a mark to the list of marks
+     *
+     * @param mark An integer between [-1, 100]
+     */
+    public void addMark(int mark) {
+        marks.add(mark);
+    }
+
+    /**
+     * Removes a element at the idx th index.
+     *
+     * @param idx An integer, in the range [0,marks.size()]
+     * @return  0 if the operation was successful <br>
+     *          -1 if the index was out of range
+     */
+    public int deleteIdx(int idx) {
+        if(idx >= marks.size() || idx < 0) {
+            return -1;
+        }
+        marks.remove(idx);
+
+    }
+
+    /**
      * Calculates the average of the student (all assignments are weighted the same)
      * using sum(marks)/number of marks
      *
      * @return The average of the student
      */
     public double average() {
-        int tot = 0;
+        int tot = 0, marked = 0;
         for (int mark: marks) {
-            tot += mark;
+            if(mark != -1) {
+                tot += mark;
+                marked ++;
+            }
         }
-        return tot / (double)marks.size();
+        return tot / (double)marked;
     }
 
 
