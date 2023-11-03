@@ -1,5 +1,9 @@
 import java.util.ArrayList;
 
+/**
+ * This class holds its name, course code, and students it has the functionality to add and demit students
+ * add and edit marks on assignments and assignments themselves. Also, it can calculate the average of an assignment.
+ */
 public class Course {
     private String name; // The name of the course
     private String code; // The course code
@@ -11,6 +15,67 @@ public class Course {
         this.students = students;
     }
 
+    /**
+     * @return The name of the course
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @return The course code
+     */
+    public String getCode() {
+        return code;
+    }
+
+    /**
+     * @return the array list of students
+     */
+    public ArrayList<Student> getStudents() {
+        return students;
+    }
+
+    /**
+     * Sets the course name
+     *
+     * @param name The new course name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Sets the course code
+     *
+     * @param code The new course code
+     */
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    /**
+     * Sets the students in the course
+     *
+     * @param students The new list of students in the course
+     */
+    public void setStudents(ArrayList<Student> students) {
+        this.students = students;
+    }
+
+    /**
+     * Gets the student at index idx
+     *
+     * @param idx An integer between [0, students.size() - 1]
+     * @return The student at index idx
+     *         A student with everything empty to symbolize idx is out of range.
+     */
+    public Student getStudent(int idx) {
+        if(idx < 0 || idx >= students.size()) {
+            return new Student("", "", new ArrayList<>());
+        }
+        return students.get(idx);
+    }
 
     /**
      * Finds the index of a student by name or number
@@ -112,7 +177,7 @@ public class Course {
      * @param nameOrId The student's name or number
      * @param newMark The new mark to update to
      * @param assignmentNum The assignment that is to be updated
-     * @param changeAll If true changes all the marks for that assignmen
+     * @param changeAll If true changes all the marks for that assignment
      * @return  0 if the operation was successful <br>
      *          -1 if the nameOrId didn't exist in students <br>
      *          -2 if the assignmentNum was out of range
@@ -148,30 +213,60 @@ public class Course {
      *
      * @param assignmentNum The number of the assignment that is to be deleted
      * @return  0 if the operation was successful <br>
-     *          -1 if the assignmentNum was out of range
+     *          -2 if the assignmentNum was out of range
      */
     public int deleteAssignment(int assignmentNum) {
         for(Student stud: students) {
-            if(stud.deleteIdx(assignmentNum) == -1) {
-                return -1;
+            if(stud.deleteIdx(assignmentNum) == -2) {
+                return -2;
             }
         }
         return 0;
     }
 
     /**
-     * Prints the course average using the formula A = 1/n * Σ[i = 1, n, ai]
+     * Calculates the course average using the formula A = 1/n * Σ[i = 1, n, ai]
+     *
+     * @return The average of the course (the average of the student's averages).
      */
-    public void printCourseAvg() {
+    public double calcCourseAvg() {
         double tot = 0;
         for(Student stud: students) {
             tot += stud.average();
         }
-        System.out.println("The course average is " + tot / (double)(students.size()-1));
+        return tot / (double)(students.size()-1);
     }
 
 
+    /**
+     * Gets the average mark of an assignment.
+     *
+     * @param assignmentNum The assignment of the number that the average is calculated for.
+     * @return The average mark for the assignment
+     *         -2 for assignmentNum out of range.
+     */
+    public double assignmentAvg(int assignmentNum) {
+        double tot = 0, numMarks = 0;
+        for(Student stud: students) {
+            int mark = stud.getMark(assignmentNum);
+            if(mark == -1) {
+                continue;
+            }
+            if(mark == -2) {
+                return -2;
+            }
+            tot += mark;
+            numMarks++;
+        }
+        return tot;
+    }
 
+
+    /**
+     * Redefines the toString methods, now it prints an overview of the course
+     *
+     * @return A string that is formatted to be printed
+     */
     @Override
     public String toString() {
         String output = "Course Name: " + name + "\n" +

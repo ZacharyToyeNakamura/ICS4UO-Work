@@ -56,11 +56,12 @@ public class Student {
      *
      * @param idx An integer in [0 - marks.size())
      * @return The student's mark for the idx th assignment
+     *         -2 for out of range of the marks array
      */
     public int getMark(int idx) {
         // Safeguard for out of bounds on the array.
         if(idx >= marks.size() || idx < 0) {
-            return -1;
+            return -2;
         }
         return marks.get(idx);
     }
@@ -75,7 +76,7 @@ public class Student {
     }
 
     /**
-     * Removes a element at the idx th index.
+     * Removes an element at the idx th index.
      *
      * @param idx An integer, in the range [0,marks.size()]
      * @return  0 if the operation was successful <br>
@@ -83,10 +84,10 @@ public class Student {
      */
     public int deleteIdx(int idx) {
         if(idx >= marks.size() || idx < 0) {
-            return -1;
+            return -2;
         }
         marks.remove(idx);
-
+        return 0;
     }
 
     /**
@@ -94,6 +95,7 @@ public class Student {
      * using sum(marks)/number of marks
      *
      * @return The average of the student
+     *         -3 for a division by 0 error (they had no marks).
      */
     public double average() {
         int tot = 0, marked = 0;
@@ -103,7 +105,10 @@ public class Student {
                 marked ++;
             }
         }
-        return tot / (double)marked;
+        if (marked != 0) {
+            return tot / (double)marked;
+        }
+        return -3;
     }
 
 
