@@ -118,4 +118,9 @@ public class Student {
         this.marks = marks;
     }
 
+    public Student(String name, String number) {
+        this.name = name;
+        this.number = number;
+    }
+
 }
