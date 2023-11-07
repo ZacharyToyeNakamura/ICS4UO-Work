@@ -27,19 +27,19 @@ public class GradeBook {
         "  0: Add a student to the course\n" +
         "  1: Change a student's name or id\n" +
         "  2: Demit a student from the course\n" +
-        "  3: Go back\n",
+        "  3: Go back",
 
         "Enter which option you would like to preform: \n" +
         "  0: Edit one mark for a student\n" +
         "  1: Edit all marks for a student\n" +
         "  2: Edit one student's mark for an assignment\n" +
         "  3: Edit all student's marks for an assignment\n"+
-        "  4: Go back\n",
+        "  4: Go back",
 
         "Enter which option you would like to preform: \n",
         "  0: Add an assignment\n" +
         "  1: Delete an assignment\n"+
-        "  2: Go back\n",
+        "  2: Go back",
 
         "Enter which option you would like to preform: \n" +
         "  0: Print the course average\n" +
@@ -50,7 +50,7 @@ public class GradeBook {
         "  5: Print a all student's averages and id's\n" +
         "  6: Print all of the marks for an assignment\n" +
         "  7: Print all of a student's marks\n"+
-        "  8: Go back\n"
+        "  8: Go back"
     };
     public static int[][] bounds = {{0,4},{0,3},{0,4},{0,2},{0,8}};
 
@@ -146,6 +146,16 @@ public class GradeBook {
     }
 
     /**
+     * Prints all the current student's and their numbers
+     */
+    public static void printStudents() {
+        System.out.println("Current students are: ");
+        for (Student stud: introCS.getStudents()) {
+            System.out.println("  " + stud.getName() + ", " + stud.getNumber());
+        }
+    }
+
+    /**
      * Checks if the user's input is an integer between 2 given bounds.
      *
      * @param userInput Any string that is checked
@@ -153,7 +163,7 @@ public class GradeBook {
      * @param upper The upper bound for valid input
      * @return True if the input it "valid" and false if the input isn't valid
      */
-    public boolean isValid(String userInput, int lower, int upper) {
+    public static boolean isValid(String userInput, int lower, int upper) {
         try {
             int num = Integer.parseInt(userInput);
             return num >= lower && num <= upper; // Return if it's within the bounds or not
@@ -165,12 +175,18 @@ public class GradeBook {
 
     /**
      * Returns true if the input is a student's name or id in the course.
+     * Informs the user that there is no student with the name or number in the course
+     * If it's invalid
      *
      * @param userInput Any string, it's checked to see if it's a valid student or id
      * @return True if the input is a student's name or id in the course.
      */
     public static boolean isValidStud(String userInput) {
-        return introCS.findStudent(userInput) != -1;
+        if (introCS.findStudent(userInput) == -1) {
+            System.out.println("There is no student with that name or number in this course!");
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -180,13 +196,15 @@ public class GradeBook {
         boolean exit = false;
         int menuNum = 0; // Which menu the program is currently in (-1 for not in menu)
 
-        while (!exit) {
+        while (!exit) { // While the user doesn't decide to end the program
             System.out.println(menus[menuNum]);
+            System.out.print("> ");
             String userInput = input.next();
+
             switch (menuNum) {
-                case 0:
+                case 0: // If in the first menu
                     switch (userInput) {
-                        case "0": case "1": case "2": case "3":
+                        case "0": case "1": case "2": case "3": // switch menus
                             menuNum = Integer.parseInt(userInput) + 1; // Change to a sub menu
                             break;
                         case "4":
@@ -197,9 +215,9 @@ public class GradeBook {
                             break;
                     }
                     break;
-                case 1:
+                case 1: // If in the second menu
                     switch (userInput) {
-                        case "0":
+                        case "0": // Add a student
                             System.out.print("Enter student's name: ");
                             String studName = input.next();
                             System.out.print("Enter student's number: ");
@@ -208,11 +226,11 @@ public class GradeBook {
                             menuNum = 0; // Return to main menu
                             break;
 
-                        case "1":
+                        case "1": // Edit a student's information
+                            printStudents();
                             System.out.print("Enter the student's name or number that you wish to change: ");
                             String nameOrNum = input.next();
                             if(!isValidStud(nameOrNum)) {
-                                System.out.println("There is no student with that name or number in this course!");
                                 break;
                             }
                             System.out.print("Enter the student's new name (-1 for don't change): ");
@@ -223,21 +241,25 @@ public class GradeBook {
                             if(introCS.editStudent(nameOrNum, newName, newNum) == -1) {
                                 System.out.println("Unknown Error: editStudent() student not found");
                             }
+                            menuNum = 0;
                             break;
 
-                        case "2":
-                            System.out.print("Enter the name of the student you wish to demit from the course: ");
+                        case "2": // Remove a student
+                            printStudents();
+                            System.out.print("Enter the name or number of the student you wish to demit from the course: ");
                             String nameOrId = input.next();
                             if(!isValidStud(nameOrId)) {
-                                System.out.println("There is no student with that name or number in this course!");
                                 break;
                             }
-                            introCS.demitStudent(nameOrId);
+                            // Should be impossible but as a safeguard make sure demitStudent didn't throw an error flag
+                            if (introCS.demitStudent(nameOrId) == -1) {
+                                System.out.println("Unknown Error: demitStudent student not found");
+                            }
                             menuNum = 0; // return to main menu
                             break;
 
-                        case "3":
-                            System.out.println("Returning to main menu.");
+                        case "3": // Go back
+                            System.out.println("Returning to main menu. . .");
                             menuNum = 0;
 
                         default:
@@ -247,9 +269,89 @@ public class GradeBook {
                     break;
                 
                 case 2:
+                    String newMark;
+                    String nameOrId;
+                    String assignmentNum;
                     switch(userInput) {
-                        case "0":
-                            System.out.print("Enter the name of the student: ");
+                        case "0": // Edit all of 1 student's marks (set all student's marks to x)
+                            printStudents();
+                            System.out.print("Enter the name or number of the student you wish " +
+                                    "to change all marks for: ");
+                            nameOrId = input.next();
+                            if(!isValidStud(nameOrId)) {
+                                break;
+                            }
+                            // Possible make into a method
+                            do {
+                                System.out.print("Enter the mark you wish to set all of the " + nameOrId +
+                                        "'s marks to [-1, 100]: ");
+                                newMark = input.next();
+                                if (!isValid(newMark, -1, 100)) {
+                                    System.out.println("Mark invalid please enter a mark between " +
+                                            "[0, 100] or -1 for no mark");
+                                }
+                            } while(!isValid(newMark, -1, 100));
+                            introCS.getStudent(introCS.findStudent(nameOrId)).setAllMarks(Integer.parseInt(newMark));
+                            menuNum = 0;
+                            break;
+
+                        case "1": // Edit all of all student's marks (set all marks to x)
+                            printStudents();
+                            // Possible make into a method
+                            do {
+                                System.out.print("Enter the mark you wish to set all student's marks to " +
+                                        "[-1, 100]: ");
+                                newMark = input.next();
+                                if (!isValid(newMark, -1, 100)) {
+                                    System.out.println("Mark invalid please enter a mark between " +
+                                            "[0, 100] or -1 for no mark");
+                                }
+                            } while(!isValid(newMark, -1, 100));
+
+                            for (int i = 0; i < introCS.getStudents().size(); i++) {
+                                introCS.getStudent(i).setAllMarks(Integer.parseInt(newMark));
+                            }
+                            menuNum = 0; // return to main menu
+                            break;
+
+                        case "2": // Edit 1 mark for 1 student
+                            printStudents();
+                            System.out.print("Enter the name or number of the student you wish " +
+                                    "to change all marks for: ");
+                            nameOrId = input.next();
+                            if(!isValidStud(nameOrId)) {
+                                break;
+                            }
+
+                            do {
+                                System.out.print("Enter which assignment's mark you would like to change: ");
+                                assignmentNum = input.next();
+                                if (!isValid(assignmentNum, 0, introCS.getStudents().size())) {
+                                    System.out.println("");
+                                }
+                            } while(!isValid(assignmentNum, 0, introCS.getStudents().size()));
+                            // Possible make into a method
+                            do {
+                                System.out.print("Enter the mark you wish to set all of the " + nameOrId +
+                                        "'s marks to [-1, 100]: ");
+                                newMark = input.next();
+                                if (!isValid(newMark, -1, 100)) {
+                                    System.out.println("Mark invalid please enter a mark between " +
+                                            "[0, 100] or -1 for no mark");
+                                }
+                            } while(!isValid(newMark, -1, 100));
+                            introCS.getStudent(introCS.findStudent(nameOrId)).setAllMarks(Integer.parseInt(newMark));
+                            menuNum = 0;
+                            break;
+
+                        case "3": // Edit 1 mark for every student
+
+                        case "4": // Go back
+                            System.out.println("Returning to main menu. . .");
+                            break;
+                        default:
+                            System.out.println("Invalid input, please choose a valid option!");
+                            break;
                     }
 
 

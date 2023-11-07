@@ -51,6 +51,7 @@ public class Student {
         return 0;
     }
 
+
     /** MAYBE DELETE
      * Returns the student's mark for the idx th assignment, and -1 if out of bounds
      *
@@ -73,6 +74,17 @@ public class Student {
      */
     public void addMark(int mark) {
         marks.add(mark);
+    }
+
+    /**
+     * Sets all the student's mark to 1 mark
+     *
+     * @param mark The new mark that will overwrite all the student's old marks.
+     */
+    public void setAllMarks(int mark) {
+        for (int i = 0; i < marks.size(); i++) {
+            marks.set(i, mark);
+        }
     }
 
     /**
