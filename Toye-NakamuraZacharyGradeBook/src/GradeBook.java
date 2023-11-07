@@ -232,12 +232,25 @@ public class GradeBook {
                                 System.out.println("There is no student with that name or number in this course!");
                                 break;
                             }
+                            introCS.demitStudent(nameOrId);
+                            menuNum = 0; // return to main menu
+                            break;
+
+                        case "3":
+                            System.out.println("Returning to main menu.");
+                            menuNum = 0;
 
                         default:
                             System.out.println("Invalid Input!");
                             break;
                     }
                     break;
+                
+                case 2:
+                    switch(userInput) {
+                        case "0":
+                            System.out.print("Enter the name of the student: ");
+                    }
 
 
                 default:
