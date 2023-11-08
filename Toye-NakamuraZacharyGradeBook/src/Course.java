@@ -225,6 +225,15 @@ public class Course {
     }
 
     /**
+     * returns the number of assignments the course has.
+     * @return The number of assignments
+     *         -1 for there are no students in the course
+     */
+    public int numAssignments() {
+        return students.get(0).getMarks().size();
+    }
+
+    /**
      * Calculates the course average using the formula A = 1/n * Σ[i = 1, n, ai]
      *
      * @return The average of the course (the average of the student's averages).

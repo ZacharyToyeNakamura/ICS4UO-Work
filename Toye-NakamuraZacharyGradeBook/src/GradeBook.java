@@ -49,10 +49,11 @@ public class GradeBook {
         "  4: Print all student's average\n" +
         "  5: Print a all student's averages and id's\n" +
         "  6: Print all of the marks for an assignment\n" +
-        "  7: Print all of a student's marks\n"+
-        "  8: Go back"
+        "  7: Print all of a student's marks\n" +
+        "  8: Print an overview of the course\n" + // custom
+        "  9: Go back"
     };
-    public static int[][] bounds = {{0,4},{0,3},{0,4},{0,2},{0,8}};
+    public static int[][] bounds = {{0,4},{0,3},{0,4},{0,2},{0,9}};
 
     // Hard-coded course
     public static Course introCS = new Course(
@@ -77,7 +78,7 @@ public class GradeBook {
             ))
         );
 
-    public void printCourseAvg() {
+    public static void printCourseAvg() {
         System.out.printf("The course average is: %.1f%% %n", introCS.calcCourseAvg());
     }
 
@@ -249,7 +250,7 @@ public class GradeBook {
                             System.out.print("Enter the name or number of the student you wish to demit from the course: ");
                             String nameOrId = input.next();
                             if(!isValidStud(nameOrId)) {
-                                break;
+                                break; 
                             }
                             // Should be impossible but as a safeguard make sure demitStudent didn't throw an error flag
                             if (introCS.demitStudent(nameOrId) == -1) {
@@ -326,10 +327,11 @@ public class GradeBook {
                             do {
                                 System.out.print("Enter which assignment's mark you would like to change: ");
                                 assignmentNum = input.next();
-                                if (!isValid(assignmentNum, 0, introCS.getStudents().size())) {
-                                    System.out.println("");
+                                if (!isValid(assignmentNum, 0, introCS.getStudent(nameOrId).getMarks().size())) {
+                                    System.out.println("Invalid assignment number. Please enter a number between " +
+                                            "0 and " + introCS.getStudent(nameOrId).getMarks().size() - 1);
                                 }
-                            } while(!isValid(assignmentNum, 0, introCS.getStudents().size()));
+                            } while(!isValid(assignmentNum, 0, introCS.getStudents().size() - 1));
                             // Possible make into a method
                             do {
                                 System.out.print("Enter the mark you wish to set all of the " + nameOrId +
@@ -342,9 +344,32 @@ public class GradeBook {
                             } while(!isValid(newMark, -1, 100));
                             introCS.getStudent(introCS.findStudent(nameOrId)).setAllMarks(Integer.parseInt(newMark));
                             menuNum = 0;
-                            break;
+                            break; 
 
                         case "3": // Edit 1 mark for every student
+                            do {
+                                System.out.print("Enter which assignment's mark you would like to change (for all students): ");
+                                assignmentNum = input.next();
+                                if (!isValid(assignmentNum, 0, introCS.getStudent(nameOrId).getMarks().size())) {
+                                    System.out.println("Invalid assignment number. Please enter a number between " +
+                                            "0 and " + introCS.getStudent(nameOrId).getMarks().size() - 1);
+                                }
+                            } while(!isValid(assignmentNum, 0, introCS.getStudents().size() - 1));
+                            // Possible make into a method
+                            do {
+                                System.out.print("Enter the mark you wish to set all of assignment number " + 
+                                assignmentNum + "'s marks to [-1, 100]: ");
+                                newMark = input.next();
+                                if (!isValid(newMark, -1, 100)) {
+                                    System.out.println("Mark invalid please enter a mark between " +
+                                            "[0, 100] or -1 for no mark");
+                                }
+                            } while(!isValid(newMark, -1, 100));
+                            for(Student stud: introCS.getStudent()) {
+                                stud.setMark(assignmentNum, newMark);
+                            }
+                            menuNum = 0;
+                            break; 
 
                         case "4": // Go back
                             System.out.println("Returning to main menu. . .");
@@ -353,7 +378,45 @@ public class GradeBook {
                             System.out.println("Invalid input, please choose a valid option!");
                             break;
                     }
+                
+                case 3:
+                    switch(userInput) {
+                        case "0": // Add assignment
+                            introCS.addAssignment();
+                            System.out.println("New assignment created. There are now " + introCS.getStudents().size()
+                                + " assignments for this course.");
+                            menuNum = 0;
+                            break;
 
+                        case "1": // Delete assignment
+                            do {
+                                System.out.print("Enter the assignment number you would like to delete: ");
+                                assignmentNum = input.next();
+                                if (!isValid(assignmentNum, 0, introCS.numAssignments()-1)) {
+                                    System.out.println("Invalid assignment number. Please enter a number " +
+                                        "between 0 and " + (introCS.numAssignments() - 1) + ".");
+                                }
+                            } while(!isValid(assignmentNum, 0, introCS.numAssignments() - 1)); // CHANGE THIS
+                            introCS.deleteAssignment(assignmentNum);
+                            System.out.println("Deleted assignment number " + assignmentNum);
+                            menuNum = 0; // return to the main menu
+                            break;
+
+                        case "2": // go back
+                            System.out.println("Returning to main menu. . .");
+                            menuNum = 0; // return to main menu
+                            break;
+
+                        default: // Invalid input
+                            System.out.println("Invalid input, please choose a valid option!");
+                            break;
+                    }
+                
+                case 4:
+                    switch(userInput) {
+                        case "0":
+                            printCourseAvg();
+                    }
 
                 default:
                     System.out.println("Invalid Input!");
