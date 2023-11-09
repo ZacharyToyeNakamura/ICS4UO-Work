@@ -36,9 +36,9 @@ public class GradeBook {
         "  3: Edit all student's marks for an assignment\n"+
         "  4: Go back",
 
-        "Enter which option you would like to preform: \n",
+        "Enter which option you would like to preform: \n" +
         "  0: Add an assignment\n" +
-        "  1: Delete an assignment\n"+
+        "  1: Delete an assignment\n" +
         "  2: Go back",
 
         "Enter which option you would like to preform: \n" +
@@ -53,6 +53,8 @@ public class GradeBook {
         "  8: Print an overview of the course\n" + // custom
         "  9: Go back"
     };
+    // public static String[] menus = {"0", "1", "2", "3", "4"};
+
     public static int[][] bounds = {{0,4},{0,3},{0,4},{0,2},{0,9}};
 
     // Hard-coded course
@@ -164,7 +166,7 @@ public class GradeBook {
         String userInput;
         do {
             System.out.print(message);
-            userInput = input.next();
+            userInput = input.nextLine();
             if (introCS.findStudent(userInput) == -1) {
                 System.out.println("There is no student with that name or number in this course!");
             }
@@ -181,7 +183,8 @@ public class GradeBook {
                 System.out.println("Mark invalid please enter a mark between [0, 100] or -1 for no mark");
             }
             System.out.print(message);
-            newMark = input.next();
+            newMark = input.nextLine();
+            first = false;
         } while(!isValid(newMark, -1, 100));
         return Integer.parseInt(newMark);
     }
@@ -196,7 +199,8 @@ public class GradeBook {
                         "between 0 and " + (introCS.numAssignments() - 1) + ".");
             }
             System.out.print(message);
-            assignmentNum = input.next();
+            assignmentNum = input.nextLine();
+            first = false;
 
         } while (!isValid(assignmentNum, 0, introCS.numAssignments() - 1));
         return Integer.parseInt(assignmentNum);
@@ -215,10 +219,12 @@ public class GradeBook {
         int newMark;
         int assignmentNum;
 
+        
+
         while (!exit) { // While the user doesn't decide to end the program
             System.out.println(menus[menuNum]);
             System.out.print("> ");
-            String userInput = input.next();
+            String userInput = input.nextLine();
 
             switch (menuNum) {
                 case 0: // If in the first menu
@@ -238,10 +244,12 @@ public class GradeBook {
                     switch (userInput) {
                         case "0": // Add a student
                             System.out.print("Enter student's name: ");
-                            String studName = input.next();
+                            String studName = input.nextLine();
                             System.out.print("Enter student's number: ");
-                            String studNum = input.next();
+                            String studNum = input.nextLine();
                             introCS.addStudent(new Student(studName, studNum));
+
+                            System.out.println("Succesfully added new student: " + studName + ", " studNum);
                             menuNum = 0; // Return to main menu
                             break;
 
@@ -249,13 +257,15 @@ public class GradeBook {
                             nameOrNum = getValidStud("Enter the student's name or number that you wish to change: ");
 
                             System.out.print("Enter the student's new name (-1 for don't change): ");
-                            String newName = input.next();
+                            String newName = input.nextLine();
                             System.out.print("Enter the student's new number (-1 for don't change): ");
-                            String newNum = input.next();
+                            String newNum = input.nextLine();
                             // Should be impossible but as a safeguard make sure editStudent didn't throw an error flag
                             if(introCS.editStudent(nameOrNum, newName, newNum) == -1) {
                                 System.out.println("Unknown Error: editStudent() student not found");
                             }
+
+                            System.out.println("Successfully changed " + nameOrNum + "'s information");
                             menuNum = 0;
                             break;
 
@@ -267,6 +277,8 @@ public class GradeBook {
                             if (introCS.demitStudent(nameOrNum) == -1) {
                                 System.out.println("Unknown Error: demitStudent student not found");
                             }
+
+                            System.out.println("Succesfully removed " + nameOrNum + " from the course");
                             menuNum = 0; // return to main menu
                             break;
 
@@ -290,6 +302,9 @@ public class GradeBook {
                                     "'s marks to [-1, 100]: ");
 
                             introCS.getStudent(introCS.findStudent(nameOrNum)).setAllMarks(newMark);
+
+                            System.out.println("Succesfully changed all of the marks of " + nameOrNum +
+                                " to " + newMark + ".");
                             menuNum = 0;
                             break;
 
@@ -300,6 +315,8 @@ public class GradeBook {
                             for (int i = 0; i < introCS.getStudents().size(); i++) {
                                 introCS.getStudent(i).setAllMarks(newMark);
                             }
+                            
+                            System.out.println("Succesfully set all marks for the course to " + newMark + ".");
                             menuNum = 0; // return to main menu
                             break;
 
@@ -341,7 +358,7 @@ public class GradeBook {
                     switch(userInput) {
                         case "0": // Add assignment
                             introCS.addAssignment();
-                            System.out.println("New assignment created. There are now " + introCS.getStudents().size()
+                            System.out.println("New assignment created. There are now " + introCS.numAssignments()
                                 + " assignments for this course.");
                             menuNum = 0;
                             break;

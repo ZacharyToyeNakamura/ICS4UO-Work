@@ -243,7 +243,7 @@ public class Course {
         for(Student stud: students) {
             tot += stud.average();
         }
-        return tot / (double)(students.size()-1);
+        return tot / (double)students.size();
     }
 
 
