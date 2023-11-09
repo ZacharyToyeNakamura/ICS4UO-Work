@@ -239,11 +239,15 @@ public class Course {
      * @return The average of the course (the average of the student's averages).
      */
     public double calcCourseAvg() {
-        double tot = 0;
+        double tot = 0, numStud = 0;
         for(Student stud: students) {
-            tot += stud.average();
+            // If the student has at least 1 mark
+            if (stud.average() != -3) {
+                tot += stud.average();
+                numStud++;
+            }
         }
-        return tot / (double)students.size();
+        return tot / numStud;
     }
 
 
@@ -267,7 +271,7 @@ public class Course {
             tot += mark;
             numMarks++;
         }
-        return tot;
+        return tot / numMarks;
     }
 
 
@@ -288,7 +292,7 @@ public class Course {
         for (Student stud: students) {
             // Add the name except the last initial, and all the marks
             output += stud.getName() +
-                    ": " + stud.getMarks().toString().substring(1, stud.getMarks().toString().length() - 2) +
+                    ": " + stud.getMarks().toString().substring(1, stud.getMarks().toString().length() - 1) +
                     "\n";
         }
         return output.substring(0, output.length() - 1);

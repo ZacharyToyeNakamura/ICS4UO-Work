@@ -133,6 +133,7 @@ public class Student {
     public Student(String name, String number) {
         this.name = name;
         this.number = number;
+        this.marks = new ArrayList<>();
     }
 
 }
