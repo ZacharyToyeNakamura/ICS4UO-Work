@@ -123,7 +123,12 @@ public class GradeBook {
         Student stud = introCS.getStudent(introCS.findStudent(nameOrId));
         System.out.println("Marks for " + stud.getName() + ": ");
         for(int i = 0; i < stud.getMarks().size(); i++) {
-            System.out.println("  Assignment " + i + ": " + stud.getMark(i));
+            if (stud.getMark(i) != -1) {
+                System.out.println("  Assignment " + i + ": " + stud.getMark(i));
+            }
+            else {
+                System.out.println("  Assignment " + i + ": No Mark");
+            }
         }
     }
 
@@ -307,8 +312,10 @@ public class GradeBook {
                                     "'s marks to (-1 for no mark): ");
 
                             introCS.getStudent(introCS.findStudent(nameOrNum)).setMark(assignmentNum, newMark);
+                            System.out.println("Successfully changed " + nameOrNum + "'s mark for assignment number" 
+                                + assignmentNum + " to " + newMark);
                             menuNum = 0;
-                            break;
+                            break; 
 
                         case "1": // Edit all of 1 student's marks (set all student's marks to x)
                             nameOrNum = getValidStud("Enter the name or number of the student you wish " +
@@ -334,6 +341,10 @@ public class GradeBook {
                                     assignmentNum + "'s mark to for " + nameOrNum + " (-1 for no mark): ");
 
                             introCS.getStudent(introCS.findStudent(nameOrNum)).setMark(assignmentNum, newMark);
+                            System.out.println("Successfully changed assignment number " + assignmentNum + 
+                                "'s mark for " + nameOrNum + " to " + newMark + ".");
+                            menuNum = 0;
+                            break;
 
 
                         case "3": // Edit 1 mark for every student  // Edit all student's marks for an assignment
@@ -346,10 +357,10 @@ public class GradeBook {
                             for(Student stud: introCS.getStudents()) {
                                 stud.setMark(assignmentNum, newMark);
                             }
+                            System.out.println("Successfully changed all marks for assignment number " +
+                            assignmentNum + " to " + newMark + " for all students.");
                             menuNum = 0;
                             break;
-
-
 
                         case "4": // Edit all of all student's marks (set all marks to x)
                             newMark = getValidMark("Enter the mark you wish to set all student's marks to " +
@@ -386,7 +397,8 @@ public class GradeBook {
                             assignmentNum = getValidAssignNum("Enter the assignment number you would like to delete: ");
 
                             introCS.deleteAssignment(assignmentNum);
-                            System.out.println("Deleted assignment number " + assignmentNum);
+                            System.out.println("Deleted assignment number " + assignmentNum + ". There are now " +
+                                introCS.numAssignments() + " assignments in the course.");
                             menuNum = 0; // return to the main menu
                             break;
 
@@ -456,7 +468,12 @@ public class GradeBook {
                                     "to see the marks for: ");
                             System.out.println("Marks for assignment number " + assignmentNum);
                             for (Student stud: introCS.getStudents()) {
-                                System.out.printf("  %s: %d%% %n",stud.getName(), stud.getMark(assignmentNum));
+                                if (stud.getMark(assignmentNum) != -1) {
+                                    System.out.printf("  %s: %d%% %n",stud.getName(), stud.getMark(assignmentNum));
+                                }
+                                else {
+                                    System.out.printf("  %s: No Mark %n",stud.getName());
+                                }
                             }
                             menuNum = 0;
                             break;
