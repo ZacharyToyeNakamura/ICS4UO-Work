@@ -29,11 +29,12 @@ public class Course {
         return code;
     }
 
+
     /**
-     * @return the array list of students
+     * @return The number of students in the course
      */
-    public ArrayList<Student> getStudents() {
-        return students;
+    public int getNumStudents() {
+        return students.size();
     }
 
     /**
@@ -54,14 +55,6 @@ public class Course {
         this.code = code;
     }
 
-    /**
-     * Sets the students in the course
-     *
-     * @param students The new list of students in the course
-     */
-    public void setStudents(ArrayList<Student> students) {
-        this.students = students;
-    }
 
     /**
      * Gets the student at index idx
@@ -78,6 +71,16 @@ public class Course {
     }
 
     /**
+     * Returns the name of the student at idx i
+     *
+     * @param idx An integer between [0, students.size()]
+     * @return The name of the student at index idx
+     */
+    public String studName(int idx) {
+        return getStudent(idx).getName();
+    }
+
+    /**
      * Finds the index of a student by name or number
      * 
      * @return The index of the student in the students ArrayList, or -1 if they aren't in the list
@@ -90,6 +93,21 @@ public class Course {
         }
         return -1;
     }
+
+    /**
+     * Returns the student object with the name or number of the input
+     *
+     * @param nameOrId The name or number of the student object that is wanted
+     * @return The student object with a name or number matching the parameter
+     *         - A student with everything set to nothing if not found.
+     */
+    public Student findStudObj(String nameOrId) {
+        if(findStudent(nameOrId) == -1) {
+            return new Student("", "");
+        }
+        return students.get(findStudent(nameOrId));
+    }
+
 
     /**
      * Deletes the first student with a nameOrId from the course
@@ -137,53 +155,20 @@ public class Course {
         return 0;
     }
 
-    /**
-     * Changes a student's mark to a different mark.
-     * It changes all the student's marks if changeAll is true or just the mark of assignment number
-     * if false.
-     * 
-     * @param nameOrId The student's name or number
-     * @param newMark The new mark
-     * @param assignmentNum The assignment that is to be changed
-     * @param changeAll True to change all the student's marks or false to just change assignmentNum th
-     *                  assignment's mark
-     * @return  0 if the operation was successful <br>
-     *          -1 if the student doesn't exist <br>
-     *          -2 if the assignmentNum is not a possible assignment number
-     *          (ex. there are 4 assignment and tries to change the 7th assignment.)
-     */
-    public int editStudentMark(String nameOrId, int newMark, int assignmentNum, boolean changeAll) {
-        int studentIdx = findStudent(nameOrId);
-        if(studentIdx == -1) {
-            return -1;
-        }
-        // Sets all the marks to newMark
-        if(changeAll) {
-            if(newMark < 0) {
-                newMark = 0; // Don't change the mark to a negative number, instead change to 0.
-            }
-            for (int i = 0; i < students.get(studentIdx).getMarks().size(); i++) {
-                students.get(studentIdx).setMark(i, newMark);
-            }
-            return 0;
-        }
-        return students.get(studentIdx).setMark(assignmentNum, newMark);
-    }
 
 
     /**
-     *
+     * Changes the mark of 1 assignment for 1 student to a new mark.
      *
      * @param nameOrId The student's name or number
      * @param newMark The new mark to update to
      * @param assignmentNum The assignment that is to be updated
-     * @param changeAll If true changes all the marks for that assignment
      * @return  0 if the operation was successful <br>
      *          -1 if the nameOrId didn't exist in students <br>
      *          -2 if the assignmentNum was out of range
      *          (ex. there are 4 assignment and tries to change the 7th assignment.)
      */
-    public int editAssignmentMark(String nameOrId, int newMark, int assignmentNum, boolean changeAll) {
+    public int editMark(String nameOrId, int newMark, int assignmentNum) {
         int studentIdx = findStudent(nameOrId);
         if(studentIdx == -1) {
             return -1;
@@ -191,11 +176,8 @@ public class Course {
         if(students.get(studentIdx).setMark(assignmentNum, newMark) != 0) {
             return -2;
         }
-        if(changeAll) {
-            for(Student stud: students) {
-                stud.setMark(assignmentNum, newMark);
-            }
-        }
+        students.get(findStudent(nameOrId)).setMark(assignmentNum, newMark);
+
         return 0;
     }
 
