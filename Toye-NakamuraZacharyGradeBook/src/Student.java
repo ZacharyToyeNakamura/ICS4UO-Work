@@ -1,5 +1,10 @@
 import java.util.ArrayList;
 
+/**
+ * A student has a name, a number, and a list of all of the student's marks.
+ * This class can preform many operations including but no limited to changing it's name, calculating the average of the arraylist,
+ * returning the size of the array list, and settings certain indexes in the array list!
+ */
 public class Student {
     private String name; // The students name
     private String number; // The student's number
@@ -16,22 +21,36 @@ public class Student {
         return name;
     }
 
+    /**
+     * @return The student's number
+     */
     public String getNumber() {
         return number;
     }
 
+
     /**
-     * @return The array list of the student's marks
+     * @return the number of marks the student has
      */
-    public ArrayList<Integer> getMarks() {
-        return marks;
+    public int getNumMarks() {
+        return marks.size();
     }
 
 
+    /**
+     * Changes the name of the student
+     * 
+     * @param name Any string, the new name of the student
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Changes the student's number
+     * 
+     * @param number Any string, the new number for the student
+     */
     public void setNumber(String number) {
         this.number = number;
     }
@@ -39,7 +58,7 @@ public class Student {
     /**
      * Sets the idx th assignment mark to mark.
      *
-     * @param idx A integer number
+     * @param idx A integer number | The assignment that will have it's mark changed
      * @param mark An integer number between [-1, 100] (with -1 meaning no mark)
      * @return 0 if it successfully set the mark, -2 if not
      */
@@ -77,7 +96,7 @@ public class Student {
     }
 
     /**
-     * Sets all the student's mark to 1 mark
+     * Sets all the student's mark to the parameter mark
      *
      * @param mark The new mark that will overwrite all the student's old marks.
      */
@@ -123,13 +142,28 @@ public class Student {
         return -3;
     }
 
-
+    /**
+     * Creates a student with a name a number and all of their marks
+     * @param name The student's name
+     * @param number The student's number
+     * @param marks The number of marks the student has. (should be equal to numAssignments
+     * for the course the student is in if they are in a course.)
+     */
     public Student(String name, String number, ArrayList<Integer> marks) {
         this.name = name;
         this.number = number;
         this.marks = marks;
     }
 
+    /**
+     * Contrustor for student, execpt it doesn't require any marks.
+     * Since the student itself doesn't know how many assignments there are
+     * it is assumed that any call of contrusting a student this way will be followed up with 
+     * filling it's marks with -1 equal to the number of assignments
+     * 
+     * @param name the name of the student
+     * @param number The number of the student
+     */
     public Student(String name, String number) {
         this.name = name;
         this.number = number;

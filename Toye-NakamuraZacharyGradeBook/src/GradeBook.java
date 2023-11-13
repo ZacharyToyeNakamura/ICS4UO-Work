@@ -50,10 +50,11 @@ public class GradeBook {
         "  4: Print all student's average\n" +
         "  5: Print all student's averages and id's\n" +
         "  6: Print all of the marks for an assignment\n" +
-        "  7: Print all student's marks\n" +
-        "  8: Print all of a student's marks\n" +
-        "  9: Print an overview of the course\n" + // custom
-        " 10: Go back"
+        "  7: Print all marks for all assignments\n" +
+        "  8: Print all student's marks\n" +
+        "  9: Print all of a student's marks\n" +
+        " 10: Print an overview of the course\n" + // custom
+        " 11: Go back"
     };
 
 
@@ -91,11 +92,15 @@ public class GradeBook {
      */
     public static void printAssignmentAvg(int idx) {
         double avg = introCS.assignmentAvg(idx);
-        if(avg == -2) {
+        if(avg == -3) {
+            System.out.println("There are no marks for assignment " + idx + "!");
+        } else if(avg == -2) {
             System.out.println("Assignment " + idx + " doesn't exist");
-            return;
+        } else if (avg == -1) {
+            System.out.println("Assignment " + idx + " has no marks.");
+        } else {
+            System.out.printf("Assignment %d's average is %.1f%%%n", idx, avg);
         }
-        System.out.printf("Assignment %d's average is %.1f%%%n", idx, avg);
     }
 
     /**
@@ -107,11 +112,11 @@ public class GradeBook {
         double avg = introCS.findStudObj(nameOrNum).average();
         // If there is an error, tell the user
         if(avg == -3) {
-            System.out.println("The average of " + nameOrNum + " is unknown");
+            System.out.println(nameOrNum + " has no marks!");
+        } else {
+            System.out.printf("The average of %s is %.1f%% %n", nameOrNum, avg);
         }
-        System.out.printf("The average of %s is %.1f%% %n", nameOrNum, avg);
     }
-
 
 
     /**
@@ -122,11 +127,10 @@ public class GradeBook {
     public static void printStudMarks(String nameOrId) {
         Student stud = introCS.findStudObj(nameOrId);
         System.out.println("Marks for " + stud.getName() + ": ");
-        for(int i = 0; i < stud.getMarks().size(); i++) {
+        for(int i = 0; i < introCS.numAssignments(); i++) {
             if (stud.getMark(i) != -1) {
                 System.out.println("  Assignment " + i + ": " + stud.getMark(i));
-            }
-            else {
+            } else {
                 System.out.println("  Assignment " + i + ": No Mark");
             }
         }
@@ -138,7 +142,7 @@ public class GradeBook {
     public static void printStudents() {
         System.out.println("Current students are: ");
         for (int i = 0; i < introCS.getNumStudents(); i++) {
-            System.out.println("  " + introCS.getStudent(i).getName() + ", " + introCS.getStudent(i).getNumber());
+            System.out.println("  " + introCS.studName(i) + ", " + introCS.getStudent(i).getNumber());
         }
     }
 
@@ -294,6 +298,7 @@ public class GradeBook {
                         case "3": // Go back
                             System.out.println("Returning to main menu. . .");
                             menuNum = 0;
+                            break;
 
                         default:
                             System.out.println("Invalid Input!");
@@ -305,15 +310,16 @@ public class GradeBook {
                     switch(userInput) {
                         case "0": // Edit 1 mark for 1 student
                             nameOrNum = getValidStud("Enter the name or number of the student you wish " +
-                                    "to change all marks for: ");
+                                    "to change 1 marks for: ");
                             assignmentNum = getValidAssignNum("Enter which assignment's mark you would like to change" +
                                     ": ");
-                            newMark = getValidMark("Enter the mark you wish to set all of the " + nameOrNum +
-                                    "'s marks to (-1 for no mark): ");
+                            newMark = getValidMark("Enter the mark you wish to set the mark of assignment number " + assignmentNum
+                                + " for " + nameOrNum + " to (-1 for no mark): ");
 
-                            introCS.editMark(nameOrNum, assignmentNum, newMark);
+                            introCS.editMark(nameOrNum, newMark, assignmentNum);
+                        
 
-                            System.out.println("Successfully changed " + nameOrNum + "'s mark for assignment number" 
+                            System.out.println("Successfully changed " + nameOrNum + "'s mark for assignment number " 
                                 + assignmentNum + " to " + newMark);
                             menuNum = 0;
                             break; 
@@ -321,7 +327,7 @@ public class GradeBook {
                         case "1": // Edit all of 1 student's marks (set all student's marks to x)
                             nameOrNum = getValidStud("Enter the name or number of the student you wish " +
                                     "to change all marks for: ");
-                            newMark = getValidMark("Enter the mark you wish to set all of the " + nameOrNum +
+                            newMark = getValidMark("Enter the mark you wish to set all of " + nameOrNum +
                                     "'s marks to (-1 for no mark): ");
 
                             introCS.findStudObj(nameOrNum).setAllMarks(newMark);
@@ -356,7 +362,7 @@ public class GradeBook {
                                     assignmentNum + "'s marks to (-1 for no mark): ");
 
                             for(int i = 0; i < introCS.getNumStudents(); i++) {
-                                introCS.editMark(introCS.getStudent(i).getName(), assignmentNum, newMark);
+                                introCS.editMark(introCS.studName(i), assignmentNum, newMark);
                             }
                             System.out.println("Successfully changed all marks for assignment number " +
                             assignmentNum + " to " + newMark + " for all students.");
@@ -377,6 +383,7 @@ public class GradeBook {
 
                         case "5": // Go back
                             System.out.println("Returning to main menu. . .");
+                            menuNum = 0;
                             break;
 
                         default:
@@ -432,7 +439,7 @@ public class GradeBook {
                             for (int i = 0; i < introCS.numAssignments(); i++) {
                                 printAssignmentAvg(i);
                             }
-                            menuNum = 0;
+                            menuNum = 0; 
                             break;
 
                         case "3": // prints a student's average
@@ -444,19 +451,19 @@ public class GradeBook {
 
                         case "4": // prints all student's averages
                             for(int i = 0; i < introCS.getNumStudents(); i++) {
-                                printStudentAvg(introCS.getStudent(i).getName());
+                                printStudentAvg(introCS.studName(i));
                             }
                             menuNum = 0;
                             break;
 
                         case "5": // prints all student's averages and their ids
+                        // print a list of all students and their average in a course
                             for(int i = 0; i < introCS.getNumStudents(); i++) {
                                 Student stud = introCS.getStudent(i);
                                 if (stud.average() == -3) { // Edge case of a student having no marks.
                                     System.out.printf("%s, %s, No marks %n",
                                             stud.getName(), stud.getNumber());
-                                }
-                                else {
+                                } else {
                                     System.out.printf("%s, %s, Average: %.1f%% %n",
                                             stud.getName(), stud.getNumber(), stud.average());
                                 }
@@ -470,23 +477,37 @@ public class GradeBook {
                             System.out.println("Marks for assignment number " + assignmentNum);
                             for (int i = 0; i < introCS.getNumStudents(); i++) {
                                 if (introCS.getStudent(i).getMark(assignmentNum) != -1) {
-                                    System.out.printf("  %s: %d%% %n", introCS.getStudent(i).getName(), introCS.getStudent(i).getMark(assignmentNum));
+                                    System.out.printf("  %s: %d%% %n", introCS.studName(i), introCS.getStudent(i).getMark(assignmentNum));
+                                } else {
+                                    System.out.printf("  %s: No Mark %n", introCS.studName(i));
                                 }
-                                else {
-                                    System.out.printf("  %s: No Mark %n", introCS.getStudent(i).getName());
+                            }
+                            menuNum = 0;
+                            break;
+                        
+                        case "7": // prints all marks for all assignments
+                            for(int i = 0; i < introCS.numAssignments(); i++) {
+                                System.out.println("Marks for assignment number " + i + ":");
+                                for (int j = 0; j < introCS.getNumStudents(); j++) {
+                                    if (introCS.getStudent(j).getMark(i) != -1) {
+                                        System.out.printf("  %s: %d%% %n", introCS.studName(j), introCS.getStudent(j).getMark(i));
+                                    } else {
+                                        System.out.printf("  %s: No Mark %n", introCS.studName(j));
+                                    }
                                 }
                             }
                             menuNum = 0;
                             break;
 
-                        case "7": // Prints all marks of a student's marks
+
+                        case "8": // Prints all marks of a student's marks
                             for(int i = 0; i < introCS.getNumStudents(); i++) {
-                                printStudMarks(introCS.getStudent(i).getName());
+                                printStudMarks(introCS.studName(i));
                             }
                             menuNum = 0;
                             break;
 
-                        case "8":
+                        case "9":
                             nameOrNum = getValidStud("Enter the name or number of the student you would like to " +
                                     "see the marks for: ");
 
@@ -494,12 +515,12 @@ public class GradeBook {
                             menuNum = 0;
                             break;
 
-                        case "9": // Custom: prints an overview of the course
+                        case "10": // Custom: prints an overview of the course
                             System.out.println(introCS);
                             menuNum = 0;
                             break;
 
-                        case "10":
+                        case "11":
                             System.out.println("Returning to main menu. . .");
                             menuNum = 0;
                             break;

@@ -3,6 +3,17 @@ import java.util.ArrayList;
 /**
  * This class holds its name, course code, and students it has the functionality to add and demit students
  * add and edit marks on assignments and assignments themselves. Also, it can calculate the average of an assignment.
+ * 
+ * Why do certain methods have a int return value when they could be void? Error flags
+ * 
+ * Error flag meanings:
+ * -1: Student name or number doesn't exist in the course
+ * -2: Assignment number out of range
+ * -3: Divsion by 0 (in average) 
+ * 
+ * 0 Means a successful operation
+ * 
+ * Why are there no constants? The mark min and max should ALWAYS be between 0 and 100.
  */
 public class Course {
     private String name; // The name of the course
@@ -171,12 +182,14 @@ public class Course {
     public int editMark(String nameOrId, int newMark, int assignmentNum) {
         int studentIdx = findStudent(nameOrId);
         if(studentIdx == -1) {
+            System.out.println("Bad Error: editMark student out of range!");
             return -1;
         }
-        if(students.get(studentIdx).setMark(assignmentNum, newMark) != 0) {
+        if(findStudObj(nameOrId).setMark(assignmentNum, newMark) != 0) {
+            System.out.println("Bad Error: editMark mark wasn't set!");
             return -2;
         }
-        students.get(findStudent(nameOrId)).setMark(assignmentNum, newMark);
+        // findStudObj(nameOrId).setMark(assignmentNum, newMark);
 
         return 0;
     }
@@ -212,7 +225,10 @@ public class Course {
      *         -1 for there are no students in the course
      */
     public int numAssignments() {
-        return students.get(0).getMarks().size();
+        if(students.size() == 0) {
+            return -1;
+        }
+        return students.get(0).getNumMarks();
     }
 
     /**
@@ -253,6 +269,9 @@ public class Course {
             tot += mark;
             numMarks++;
         }
+        if (numMarks == 0) {
+            return -3; // division by 0 error
+        }
         return tot / numMarks;
     }
 
@@ -272,10 +291,13 @@ public class Course {
         }
         output += "\nAssignment Marks:\n";
         for (Student stud: students) {
-            // Add the name except the last initial, and all the marks
-            output += stud.getName() +
-                    ": " + stud.getMarks().toString().substring(1, stud.getMarks().toString().length() - 1) +
-                    "\n";
+            // Add the name, and all the marks
+            output += stud.getName() + ": ";
+            for(int i = 0; i < numAssignments(); i++) {
+                output += stud.getMark(i);
+                if(i != numAssignments()-1) output += ", ";
+            }
+            output += "\n";
         }
         return output.substring(0, output.length() - 1);
     }
