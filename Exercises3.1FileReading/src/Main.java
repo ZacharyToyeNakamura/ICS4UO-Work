@@ -8,6 +8,7 @@ import java.util.Scanner;
 /**
  * x is rows
  * y is columns
+ * After reading the file, determine the greatest product of four (4) adjacent numbers (8 directions) (↑ ↓, ← →, ↘ ↖, or ↙ ↗) in the 20 × 20 grid.
  */
 
 
