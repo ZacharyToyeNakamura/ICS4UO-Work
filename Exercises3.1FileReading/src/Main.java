@@ -9,11 +9,14 @@ import java.util.Scanner;
  * x is rows
  * y is columns
  * After reading the file, determine the greatest product of four (4) adjacent numbers (8 directions) (↑ ↓, ← →, ↘ ↖, or ↙ ↗) in the 20 × 20 grid.
+ *
+ * Question 1, altered
+ *
  */
 
 
 public class Main {
-    public static final String FILENAME = "/workspaces/javaG12/Exercises3.1FileReading/src/grid.txt";
+    public static final String FILENAME = "src/grid.txt";
     public static final long[][] MOVES = {{1,0},{-1,0},{0,1},{0,-1},{1,1},{1,-1},{-1,1},{-1,-1}}; 
     public static final int MN = 20;
     public static final int PATHLEN = 4;

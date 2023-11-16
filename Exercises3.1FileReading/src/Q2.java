@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
-// Second question
+// Second question | Finished
 public class Q2 {
     public static void main(String args[]) {
         String filename = "src/names.txt";
@@ -21,7 +21,7 @@ public class Q2 {
             for(int i = 1; i <= names.size(); i++) {
                 int score = 0;
                 for(int j = 0; j < names.get(i-1).length(); j++) {
-                    score += (int)names.get(i-1).charAt(j)-'A';
+                    score += (int)names.get(i-1).charAt(j)-'A'+1;
                 }
                 total += score * i;
             }
