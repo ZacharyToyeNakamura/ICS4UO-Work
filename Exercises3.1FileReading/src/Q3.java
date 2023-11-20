@@ -156,7 +156,7 @@ public class Q3 {
                     if(i == 4) {
                         if(p1Val < 5) {
                             p1Val = 5;
-
+                            p1ValHigh[5] = p1Sorted.get(i);
                         }
                     }
                 }
