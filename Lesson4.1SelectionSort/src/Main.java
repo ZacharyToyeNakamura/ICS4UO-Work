@@ -5,8 +5,9 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Main {
-    public static final int MN = (int)1e7; // ~3s for 1e5
+    public static final int MN = (int)1e6; // ~3s for 1e5
     // ~20s for 3e5
+    // ~17ss for 1e7 quicksort
     public static final int high = 10000000;
     public static final int low = -10000000;
     public static int smallest (int[] array) {
@@ -107,10 +108,51 @@ public class Main {
         }
         ArrayList<Integer> right = quickSort(greater);
         ArrayList<Integer> left = quickSort(lesser);
-//        System.out.println("Looking At: ");
-//        System.out.println("Lesser " + left);
-//        System.out.println("Pivot " + pivot);
-//        System.out.println("Greater " + right);
+
+        // optimize this?
+        left.add(pivot);
+        for (int i = 0; i < right.size(); i++) {
+            left.add(right.get(i));
+        }
+        return left;
+    }
+
+
+    // O(NlogN) average O(N^2) worst
+//    public static final int CUTOFF = 8;
+    public static ArrayList<Integer> quickSort2(ArrayList<Integer> arr, int CUTOFF) {
+        if(arr.size() <= CUTOFF) {
+            // run selection sort
+            for (int i = 0; i < arr.size(); i++) {
+                int lowest = (int)0x3f3f3f3f, lowIdx = -1;
+                for (int j = i; j < arr.size(); j++) {
+                    if(arr.get(j) < lowest) {
+                        lowest = arr.get(j);
+                        lowIdx = j;
+                    }
+                }
+                if(lowest != arr.get(i)) {
+                    // swap
+                    int temp = arr.get(i);
+                    arr.set(i, arr.get(lowIdx));
+                    arr.set(lowIdx, temp);
+                }
+            }
+            return arr;
+        }
+        int pivot = arr.get(0); // Random pivot for now, optimize later
+        arr.remove(0);
+        ArrayList<Integer> greater = new ArrayList<>();
+        ArrayList<Integer> lesser = new ArrayList<>();
+        for (int i = 0; i < arr.size(); i++) {
+            if(arr.get(i) > pivot) {
+                greater.add(arr.get(i));
+            } else {
+                lesser.add(arr.get(i));
+            }
+        }
+        ArrayList<Integer> right = quickSort2(greater, CUTOFF);
+        ArrayList<Integer> left = quickSort2(lesser, CUTOFF);
 
         // optimize this?
         left.add(pivot);
@@ -131,12 +173,14 @@ public class Main {
         }
 
         System.out.println("Starting. . .");
-        final long startTime = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
 
 
 //        selectionSort(arr);
 
-        arr2 = quickSort(arr2);
+        arr2 = quickSort2(arr2, 8);
+        // Quicksort for 1e7: 21.585s
+        // Quicksort2 for 1e7: 19.802s
         saveList(arr2);
 
 
