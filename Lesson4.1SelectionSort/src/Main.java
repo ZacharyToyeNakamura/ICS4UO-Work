@@ -5,9 +5,9 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Main {
-    public static final int MN = (int)1e6; // ~3s for 1e5
+    public static final int MN = (int)1e7; // ~3s for 1e5
     // ~20s for 3e5
-    // ~17ss for 1e7 quicksort
+    // ~17s for 1e7 quicksort
     public static final int high = 10000000;
     public static final int low = -10000000;
     public static int smallest (int[] array) {
@@ -123,19 +123,31 @@ public class Main {
     public static ArrayList<Integer> quickSort2(ArrayList<Integer> arr, int CUTOFF) {
         if(arr.size() <= CUTOFF) {
             // run selection sort
-            for (int i = 0; i < arr.size(); i++) {
-                int lowest = (int)0x3f3f3f3f, lowIdx = -1;
-                for (int j = i; j < arr.size(); j++) {
-                    if(arr.get(j) < lowest) {
-                        lowest = arr.get(j);
-                        lowIdx = j;
+//            for (int i = 0; i < arr.size(); i++) {
+//                int lowest = (int)0x3f3f3f3f, lowIdx = -1;
+//                for (int j = i; j < arr.size(); j++) {
+//                    if(arr.get(j) < lowest) {
+//                        lowest = arr.get(j);
+//                        lowIdx = j;
+//                    }
+//                }
+//                if(lowest != arr.get(i)) {
+//                    // swap
+//                    int temp = arr.get(i);
+//                    arr.set(i, arr.get(lowIdx));
+//                    arr.set(lowIdx, temp);
+//                }
+//            }
+            for(int i = 1; i < arr.size(); i++) {
+                for(int j = i; j > 0; j--) {
+                    if(arr.get(j) < arr.get(j-1)) { // push the element up until it's at a place where arr[j-1] > arr[j] > arr[j+1]
+                        int temp = arr.get(j);
+                        arr.set(j, arr.get(j-1));
+                        arr.set(j-1, temp);
                     }
-                }
-                if(lowest != arr.get(i)) {
-                    // swap
-                    int temp = arr.get(i);
-                    arr.set(i, arr.get(lowIdx));
-                    arr.set(lowIdx, temp);
+                    else { // rest of the array is sorted
+                        break;
+                    }
                 }
             }
             return arr;
@@ -178,13 +190,18 @@ public class Main {
 
 //        selectionSort(arr);
 
-        arr2 = quickSort2(arr2, 8);
+        arr2 = quickSort(arr2);
         // Quicksort for 1e7: 21.585s
         // Quicksort2 for 1e7: 19.802s
         saveList(arr2);
+        System.out.println("Time for quickSort: " + ((System.currentTimeMillis() - startTime)/1000.0) + " seconds");
 
+        arr2.clear();
+        for (int i = 0; i < MN; i++) arr2.add((int)(Math.random()*(high - low + 1) + low));
+        startTime = System.currentTimeMillis();
+        arr2 = quickSort2(arr2, 20);
+        saveList(arr2);
+        System.out.println("Time for quickSort2: " + ((System.currentTimeMillis() - startTime)/1000.0) + " seconds");
 
-
-        System.out.println("Time: " + ((System.currentTimeMillis() - startTime)/1000.0) + " seconds");
     }
 }
