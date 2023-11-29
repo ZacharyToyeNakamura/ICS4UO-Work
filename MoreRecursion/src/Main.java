@@ -102,7 +102,7 @@ public class Main {
 
 
 
-    // Attempt to optimize the function?
+    // Attempt to optimize the function? Didn't work, if I could make my own call stack. . .
     public static int[][] rem = new int[100][100];
     public static int ackermann2(int m, int n) {
         if(rem[m][n] != INF) return rem[m][n];

@@ -35,6 +35,17 @@ public class Main {
         return 1 / (x * powerFunc(x, n - 1));
     }
 
+    // Mr cho's way
+    public static double powerFunc2(double x, int n) {
+        if(n == 1) {
+            return x;
+        }
+        if(n > 0) {
+            return x * (powerFunc2(x, n - 1));
+        }
+        return 1 / (x * powerFunc2(x, n + 1));
+    }
+
     // 3
     public static int fib(int n) {
         if (n == 1 || n == 2) {
@@ -102,10 +113,11 @@ public class Main {
 
 
     public static void main(String[] args) {
-        System.out.println("Hello world! " + powerFunc(3, -3));
+        System.out.println("powerFun " + powerFunc(3, -3));
         System.out.println("fib " + fib(10));
         System.out.println("gcd " + gcd(120,120000));
         System.out.println("square num " + squareNum(-10));
         System.out.println("Prime " + prime(25000));
+        System.out.println("Power function 3^-4: " + powerFunc2(3, -3));
     }
 }

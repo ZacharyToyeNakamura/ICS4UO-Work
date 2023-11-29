@@ -58,6 +58,20 @@ public class Main {
         return -1;
     }
 
+    public static int binarySearchRec(int[] arr, int searched, int l, int r) {
+        if(l >= r) {
+            return -1;
+        }
+        int mid = l + (r - l) / 2;
+        if(arr[mid] == searched) {
+            return mid;
+        }
+        if(searched > arr[mid]) {
+            return binarySearchRec(arr, searched, mid + 1, r);
+        }
+        return binarySearchRec(arr, searched, l, mid);
+    }
+
 
 
     // 1e9 out of heap space
@@ -80,6 +94,7 @@ public class Main {
             int search = (int)(Math.random()*(h - l) + l);
 //            System.out.println("Looking for " + search);
             System.out.println("Index of " + search + " is: " + binarySearch(arr, search));
+            System.out.println("Index of rec " + search + " is: " + binarySearchRec(arr, search, 0, arr.length-1));
 //            System.out.println("Linear search says " + linearSearch2(arr, search));
         }
 
