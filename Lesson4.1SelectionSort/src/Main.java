@@ -1,11 +1,10 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Main {
-    public static final int MN = (int)1e7; // ~3s for 1e5
+    public static final int MN = (int)1e5; // ~3s for 1e5
     // ~20s for 3e5
     // ~17s for 1e7 quicksort
     public static final int high = 10000000;
@@ -122,22 +121,7 @@ public class Main {
 //    public static final int CUTOFF = 8;
     public static ArrayList<Integer> quickSort2(ArrayList<Integer> arr, int CUTOFF) {
         if(arr.size() <= CUTOFF) {
-            // run selection sort
-//            for (int i = 0; i < arr.size(); i++) {
-//                int lowest = (int)0x3f3f3f3f, lowIdx = -1;
-//                for (int j = i; j < arr.size(); j++) {
-//                    if(arr.get(j) < lowest) {
-//                        lowest = arr.get(j);
-//                        lowIdx = j;
-//                    }
-//                }
-//                if(lowest != arr.get(i)) {
-//                    // swap
-//                    int temp = arr.get(i);
-//                    arr.set(i, arr.get(lowIdx));
-//                    arr.set(lowIdx, temp);
-//                }
-//            }
+            // run insertion sort
             for(int i = 1; i < arr.size(); i++) {
                 for(int j = i; j > 0; j--) {
                     if(arr.get(j) < arr.get(j-1)) { // push the element up until it's at a place where arr[j-1] > arr[j] > arr[j+1]
@@ -175,33 +159,207 @@ public class Main {
     }
 
 
+    // Inplace quick sort
+    public static void swap(int a, int b, int arr[]) {
+        int temp = arr[a];
+        arr[a] = b;
+        arr[b] = temp;
+    }
+
+    /**
+     * In theory in place sorting should be faster
+     * @param arr
+     * @param l Inclusive
+     * @param r Inclusive
+     */
+    public static void inPlaceQuickSort(int[] arr, int l, int r) {
+        if(r - l < 20) {
+            // run insertion sort
+            for(int i = l; i <= r; i++) {
+                for(int j = i; j > l; j--) {
+                    if(arr[j] < arr[j-1]) { // push the element up until it's at a place where arr[j-1] > arr[j] > arr[j+1]
+                        int temp = arr[j];
+                        arr[j] = arr[j-1];
+                        arr[j-1] = temp;
+                    }
+                    else { // rest of the array is sorted
+                        break;
+                    }
+                }
+            }
+            return;
+        }
+
+        // arr[r] is the pivot
+        int pivot = arr[r]; // optimize later
+        int small = l, equal = l, large = l; // the next element that is small/large is
+        for (int i = l; i < r; i++) {
+            if(arr[i] < pivot) {
+                if(i != small) swap(small, i, arr);
+                small++;
+                equal++;
+                large++;
+            }
+            else if(arr[i] == pivot) {
+                if(i != equal) swap(equal, i, arr);
+                equal++;
+                large++;
+            }
+            else { // it's larger than pivot
+                large++;
+            }
+        }
+        swap(pivot, equal, arr); // swap the pivot with the next element after
+        inPlaceQuickSort(arr, l, small-1);
+        inPlaceQuickSort(arr, equal, r);
+    }
+
+
+    public static void mrChoQuickSort(int a[], int low, int high) {
+        final int MOVING_LEFT = 0;
+        final int MOVING_RIGHT = 1;
+
+        if(low < high) {
+            int left = low;
+            int right = high;
+            // choose first element
+            int pivot = a[low];
+            // init current direction
+            int currentDirection = MOVING_LEFT;
+
+            while(left < right) {
+                if(currentDirection == MOVING_LEFT) {
+                    while(a[right] >= pivot && left < right) {
+                        right--;
+                    }
+                    a[left] = a[right]; // shouldn't this be a swap?
+                    currentDirection = MOVING_RIGHT;
+                }
+                if(currentDirection == MOVING_RIGHT) {
+                    while(a[left] <= pivot && left < right) {
+                        left++;
+                    }
+                }
+                a[right] = a[left];
+                currentDirection = MOVING_LEFT;
+            }
+            a[left] = pivot; // or a[right] since they are equal?
+
+            mrChoQuickSort(a, low, left - 1);
+            mrChoQuickSort(a, right + 1, high);
+        }
+    }
+
+
+    public static void quickSort3(int a[], int low, int high) {
+
+        if(high - low < 8) {
+            // run insertion sort
+            for(int i = low; i <= high; i++) {
+                for(int j = i; j > low; j--) {
+                    if(a[j] < a[j-1]) { // push the element up until it's at a place where arr[j-1] > arr[j] > arr[j+1]
+                        int temp = a[j];
+                        a[j] = a[j-1];
+                        a[j-1] = temp;
+                    }
+                    else { // rest of the array is sorted
+                        break;
+                    }
+                }
+            }
+            return;
+        }
+
+        final int MOVING_LEFT = 0;
+        final int MOVING_RIGHT = 1;
+
+        if(low < high) {
+            int left = low;
+            int right = high;
+            // choose first element
+            int pivot = a[low];
+            // init current direction
+            int currentDirection = MOVING_LEFT;
+
+            while(left < right) {
+                if(currentDirection == MOVING_LEFT) {
+                    while(a[right] >= pivot && left < right) {
+                        right--;
+                    }
+                    a[left] = a[right]; // shouldn't this be a swap?
+                    currentDirection = MOVING_RIGHT;
+                }
+                if(currentDirection == MOVING_RIGHT) {
+                    while(a[left] <= pivot && left < right) {
+                        left++;
+                    }
+                }
+                a[right] = a[left];
+                currentDirection = MOVING_LEFT;
+            }
+            a[left] = pivot; // or a[right] since they are equal?
+
+            quickSort3(a, low, left - 1);
+            quickSort3(a, right + 1, high);
+        }
+    }
+
+
     public static void main(String[] args) {
         int[] arr = new int[MN];
+        int[] arr5 = new int[MN];
+        int[] arr6 = new int[MN];
         ArrayList<Integer> arr2 = new ArrayList<>();
 
         for (int i = 0; i < MN; i++) { // rand number generation
             arr[i] = (int)(Math.random()*(high - low + 1) + low);
-            arr2.add((int)(Math.random()*(high - low + 1) + low));
+            arr2.add(arr[i]);
+            arr5[i] = arr[i];
+            arr6[i] = arr[i];
         }
+        ArrayList<Integer> arr3 = new ArrayList<>(arr2);
+        ArrayList<Integer> arr4 = new ArrayList<>(arr2);
 
         System.out.println("Starting. . .");
         long startTime = System.currentTimeMillis();
 
 
-//        selectionSort(arr);
+        inPlaceQuickSort(arr, 0, arr.length-1);
+        printArr(arr);
+        System.out.println("Time for inPlace quickSort: " + ((System.currentTimeMillis() - startTime)/1000.0) + " seconds");
 
-        arr2 = quickSort(arr2);
-        // Quicksort for 1e7: 21.585s
-        // Quicksort2 for 1e7: 19.802s
-        saveList(arr2);
-        System.out.println("Time for quickSort: " + ((System.currentTimeMillis() - startTime)/1000.0) + " seconds");
+        selectionSort(arr);
 
-        arr2.clear();
-        for (int i = 0; i < MN; i++) arr2.add((int)(Math.random()*(high - low + 1) + low));
         startTime = System.currentTimeMillis();
-        arr2 = quickSort2(arr2, 20);
-        saveList(arr2);
-        System.out.println("Time for quickSort2: " + ((System.currentTimeMillis() - startTime)/1000.0) + " seconds");
+        arr2 = quickSort(arr2);
+//        saveList(arr2);
+        System.out.println("Time for quickSort, original: \t\t" + ((System.currentTimeMillis() - startTime)/1000.0) + " seconds");
 
+//        arr3.clear();
+//        for (int i = 0; i < MN; i++) arr3.add((int)(Math.random()*(high - low + 1) + low));
+        startTime = System.currentTimeMillis();
+        arr3 = quickSort2(arr3, 20);
+//        saveList(arr3);
+        System.out.println("Time for quickSort2, cut off 20: \t" + ((System.currentTimeMillis() - startTime)/1000.0) + " seconds");
+
+        startTime = System.currentTimeMillis();
+        arr4 = quickSort2(arr4, 8);
+//        saveList(arr4);
+        System.out.println("Time for quickSort2, cut off 8: \t" + ((System.currentTimeMillis() - startTime)/1000.0) + " seconds");
+
+        startTime = System.currentTimeMillis();
+        mrChoQuickSort(arr5, 0, arr5.length - 1);
+        System.out.println("Time for mrChoQuickSort: \t" + ((System.currentTimeMillis() - startTime)/1000.0) + " seconds");
+        printArr(arr5);
+
+        startTime = System.currentTimeMillis();
+        quickSort3(arr6, 0, arr6.length - 1);
+        System.out.println("Time for quickSort3: \t" + ((System.currentTimeMillis() - startTime)/1000.0) + " seconds");
+        printArr(arr6);
+
+        // 1e6
+//        Time for inPlace quickSort: 170.603 seconds
+//        Time for quickSort: 1.165 seconds
+//        Time for quickSort2: 1.085 seconds
     }
 }
