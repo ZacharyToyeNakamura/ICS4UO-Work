@@ -46,9 +46,9 @@ public class Payroll {
                     double sickDaysUsed = Double.parseDouble(input.nextLine().substring(1));
                     emp = new PartTimeEmployee(id, last, first, title, hoursAssigned, hourlyWage, sickDaysUsed);
                 }
-                System.out.println("Here");
                 staffList.add(emp);
             }
+            input.close();
 
             return true;
         } catch (IOException iox) {
@@ -66,8 +66,20 @@ public class Payroll {
      */
     public boolean saveStaffList(String filename) {
         try {
-            FileWriter input = new FileWriter(filename);
-            // TODO
+            FileWriter writer = new FileWriter(filename);
+            for(Employee staff: staffList) {
+                if (staff instanceof FullTimeEmployee) {
+                    writer.write(staff.getEmployeeNumber() + "," + staff.getLastName() + "," +
+                            staff.getFirstName() + "," + staff.getJobTitle() + ",full-time,"+
+                            ((FullTimeEmployee) staff).getYearlySalary() + "," + staff.getSickDays());
+                } else {
+                    writer.write(staff.getEmployeeNumber() + "," + staff.getLastName() + "," +
+                            staff.getFirstName() + "," + staff.getJobTitle() + ",full-time,"+
+                            ((PartTimeEmployee) staff).getNumHoursAssigned()+ "," +
+                            +((PartTimeEmployee) staff).getHourlyWage() +","+ staff.getSickDays());
+                }
+            }
+            writer.close();
 
             return true;
         } catch (IOException iox) {
