@@ -1,5 +1,11 @@
 package payroll;
 
+/**
+ * This class represents a full-time employee, it contains their yearly salary, the number of sick days they have left,
+ * the number of sick days they get a year and the number of months in a year.
+ * It can preform the methods found in employee as well as a few getter methods.
+ * A part-time employee is paid their salary divide by the number of months every month.
+ */
 public class FullTimeEmployee extends Employee {
     private static final double YEARLY_SICK_DAYS = 20;
     private static final int MONTHS = 12;
@@ -40,7 +46,7 @@ public class FullTimeEmployee extends Employee {
      */
     @Override
     public String toString() {
-        return super.toString() + ", full-time\n";
+        return super.toString() + ", full-time";
     }
 
 
@@ -59,7 +65,7 @@ public class FullTimeEmployee extends Employee {
      *
      * @param amount The number of sick days the employee used.
      */
-    public void useSickDays(double amount) {
+    public void useSickDay(double amount) {
         sickDaysLeft -= amount;
     }
 
@@ -89,7 +95,7 @@ public class FullTimeEmployee extends Employee {
         System.out.println("--------------- PAY STUB ---------------\n");
         this.toString();
         System.out.printf("Yearly Salary: $%.2f %n", yearlySalary);
-        System.out.printf("Current Monthly pay: $%.2f %n", this.pay());
+        System.out.printf("Current Month pay: $%.2f %n", this.pay());
         System.out.println("Sick days left: " + sickDaysLeft);
         System.out.println("----------------------------------------\n");
     }

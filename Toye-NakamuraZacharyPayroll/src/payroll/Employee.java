@@ -1,5 +1,11 @@
 package payroll;
 
+/**
+ * Any class that inherits this class will hold information on employee.
+ * Each employee has a number, last name, first name, and job title.
+ * They also will have methods to use sick days, get the number of sick days, reset the number of sick days,
+ * pay the employee, and print a pay stub for the employee.
+ */
 public abstract class Employee {
     protected String employeeNumber;
     protected String lastName;
@@ -44,12 +50,12 @@ public abstract class Employee {
 
     @Override
     public String toString() {
-        return employeeNumber + ", " + firstName + " " + lastName + ", " + jobTitle;
+        return "Employee: " + employeeNumber + ", " + firstName + " " + lastName + ", " + jobTitle;
     }
 
 
     abstract double pay();
-    abstract void useSickDays(double amount);
+    abstract void useSickDay(double amount);
     abstract double getSickDays();
     abstract void resetSickDays();
     abstract void printPayStub();
