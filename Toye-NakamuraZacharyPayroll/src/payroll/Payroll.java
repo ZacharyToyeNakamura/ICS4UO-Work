@@ -59,7 +59,8 @@ public class Payroll {
 
 
     /**
-     *
+     * Saves the current staff and all their information to a csv file that can be loading into the program later
+     * Formats the saved data in this way. Each employee is a
      *
      * @param filename
      * @return
@@ -78,6 +79,7 @@ public class Payroll {
                             ((PartTimeEmployee) staff).getNumHoursAssigned()+ "," +
                             +((PartTimeEmployee) staff).getHourlyWage() +","+ staff.getSickDays());
                 }
+                writer.write("\n");
             }
             writer.close();
 

@@ -2,6 +2,13 @@ package payroll;
 
 import java.util.Scanner;
 
+/**
+ * @author Mr. Cho
+ * @date 2023-12-11
+ *
+ * A program that lets the user interface with a payroll. It can load data, save data, print pay stubs or employee
+ * infomration or
+ */
 public class PayrollRunner {
 
     static final String FILE_PATH = "src/payroll/";
