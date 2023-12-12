@@ -1,4 +1,4 @@
-public class Person {
+public class Person{
     protected String name;
     protected int age;
     protected char gender;
@@ -29,4 +29,6 @@ public class Person {
         if(this.getClass() == o.getClass()) return ((Person) o).name == this.name && ((Person) o).gender == this.gender;
         return false; // ???
     }
+
+
 }

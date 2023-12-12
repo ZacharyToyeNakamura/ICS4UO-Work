@@ -65,6 +65,7 @@ public class PartTimeEmployee extends Employee {
      *
      * @return The amount the employee made in a month.
      */
+    @Override
     public double pay() {
         return (numHoursAssigned - (sickDaysTaken * HOURS_PER_DAY)) * hourlyWage;
     }
@@ -75,6 +76,7 @@ public class PartTimeEmployee extends Employee {
      *
      * @param amount The number of sick days the employee uses
      */
+    @Override
     public void useSickDay(double amount) {
         sickDaysTaken += amount;
     }
@@ -83,6 +85,7 @@ public class PartTimeEmployee extends Employee {
     /**
      * @return The number of sick days the employee has taken.
      */
+    @Override
     public double getSickDays() {
         return sickDaysTaken;
     }
@@ -91,17 +94,24 @@ public class PartTimeEmployee extends Employee {
     /**
      * Resets the number of sick days the employee has taken to 0.
      */
+    @Override
     public void resetSickDays() {
         sickDaysTaken = 0;
     }
 
 
+    /**
+     * Displays a pay stub to the user, it includes the employee's information, their hourly wage, the number of hours
+     * they are assigned, the number of sick days they have taken and their monthly pay.
+     */
+    @Override
     public void printPayStub() {
-        System.out.println("--------------- PAY STUB ---------------\n");
-        this.toString();
+        System.out.println("--------------- PAY STUB ---------------");
+        System.out.println(this.toString());
         System.out.printf("Hourly Wage: $%.2f %n", hourlyWage);
+        System.out.println("Number of hours assigned: " + numHoursAssigned);
         System.out.println("Sick days taken: " + sickDaysTaken); // This should be below month pay but don't want to
-        System.out.printf("Current Month pay: $%.2f %n", this.pay()); // lose marks for anything.
+        System.out.printf("Current Month pay: $%.2f %n", this.pay()); // lose marks.
         System.out.println("----------------------------------------\n");
     }
 

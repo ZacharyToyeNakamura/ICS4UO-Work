@@ -55,6 +55,7 @@ public class FullTimeEmployee extends Employee {
      *
      * @return The amount the employee made in a month.
      */
+    @Override
     public double pay() {
         return yearlySalary / MONTHS;
     }
@@ -65,6 +66,7 @@ public class FullTimeEmployee extends Employee {
      *
      * @param amount The number of sick days the employee used.
      */
+    @Override
     public void useSickDay(double amount) {
         sickDaysLeft -= amount;
     }
@@ -73,6 +75,7 @@ public class FullTimeEmployee extends Employee {
     /**
      * @return The number of sick days the employee has left.
      */
+    @Override
     public double getSickDays() {
         return sickDaysLeft;
     }
@@ -82,6 +85,7 @@ public class FullTimeEmployee extends Employee {
      * Resets the number of sick days the employee has left. (This makes the number of sick days they have left equal
      * to the yearly amount of allocated sick days (YEARLY_SICK_DAYS).)
      */
+    @Override
     public void resetSickDays() {
         sickDaysLeft = YEARLY_SICK_DAYS;
     }
@@ -91,9 +95,10 @@ public class FullTimeEmployee extends Employee {
      * Prints a pay stub to output for the user to see. This pay stub includes The employee's information, their
      * yearly salary, their current monthly pay, and the number of sick days they have left.
      */
+    @Override
     public void printPayStub() {
-        System.out.println("--------------- PAY STUB ---------------\n");
-        this.toString();
+        System.out.println("--------------- PAY STUB ---------------");
+        System.out.println(this.toString());
         System.out.printf("Yearly Salary: $%.2f %n", yearlySalary);
         System.out.printf("Current Month pay: $%.2f %n", this.pay());
         System.out.println("Sick days left: " + sickDaysLeft);

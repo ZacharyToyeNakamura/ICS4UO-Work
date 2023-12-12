@@ -6,6 +6,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * The payroll class is used to hold a list of employees and preform methods on the list. It can list all the
+ * employee's and their information, print all employee's pay stubs, print one employee's pay stub, load employees from
+ * a file (given that the file is formatted properly) and save employee information to a file (formatting it). It can
+ * also use sick days for employee's and reset sick days for part-time employees monthly and full-time employees
+ * monthly.
+ */
 public class Payroll {
     private ArrayList<Employee> staffList;
 
@@ -17,7 +24,11 @@ public class Payroll {
     }
 
     /**
-     * Loads a list of staff from the given file path
+     * Loads a list of staff from the given file path, the file must follow this format for it to load properly.
+     * Full-time employees formatted like this:
+     * EmployeeID,LastName,FirstName,JobTitle,Status,Salary,SickDaysLeft
+     * And part-time employees formatted like this:
+     * EmployeeID,LastName,FirstName,JobTitle,Status,HoursAssigned,HourlyWage,SickDaysTaken
      *
      * @param filename The path of the file that the staff list is to be read from
      * @return True if the staff list was successfully loaded, false if not.
@@ -26,7 +37,6 @@ public class Payroll {
         try {
             Scanner input = new Scanner(new File(filename));
             input.useDelimiter(",");
-            // TODO
             while(input.hasNext()) {
                 String id = input.next(); // The employee's number/id
                 String last = input.next(); // The employee's last name
@@ -60,10 +70,14 @@ public class Payroll {
 
     /**
      * Saves the current staff and all their information to a csv file that can be loading into the program later
-     * Formats the saved data in this way. Each employee is a
+     * Formats the saved data in this way. Each employee is on a separate line and.
+     * Full-time employees are formatted like this:
+     * EmployeeID,LastName,FirstName,JobTitle,Status,Salary,SickDaysLeft
+     * And part-time employees are formatted like this:
+     * EmployeeID,LastName,FirstName,JobTitle,Status,HoursAssigned,HourlyWage,SickDaysTaken
      *
      * @param filename
-     * @return
+     * @return True if the file was saved successfully and false if not.
      */
     public boolean saveStaffList(String filename) {
         try {
@@ -75,7 +89,7 @@ public class Payroll {
                             ((FullTimeEmployee) staff).getYearlySalary() + "," + staff.getSickDays());
                 } else {
                     writer.write(staff.getEmployeeNumber() + "," + staff.getLastName() + "," +
-                            staff.getFirstName() + "," + staff.getJobTitle() + ",full-time,"+
+                            staff.getFirstName() + "," + staff.getJobTitle() + ",part-time,"+
                             ((PartTimeEmployee) staff).getNumHoursAssigned()+ "," +
                             +((PartTimeEmployee) staff).getHourlyWage() +","+ staff.getSickDays());
                 }
@@ -95,6 +109,7 @@ public class Payroll {
      * Displays all the staff's information to the user.
      */
     public void listAllEmployees() {
+        System.out.println("All Employees:");
         for (Employee staff: staffList) {
             System.out.println(staff);
         }
@@ -126,7 +141,7 @@ public class Payroll {
     public void printEmployeePayStub(String id) {
         Employee emp = getEmployee(id);
         if(emp == null) {
-            System.out.println("No such employee with id: " + id +" exists in the staff list");
+            System.out.println("Employee " + id + " not found!");
             return;
         }
         emp.printPayStub();
@@ -137,6 +152,8 @@ public class Payroll {
      * Displays the pay stubs for all employees to the user.
      */
     public void printAllPayStubs() {
+        System.out.println( "All pay stubs of all employees:\n" +
+                            "All Employee Pay Stubs:");
         for (Employee staff: staffList) {
             staff.printPayStub();
         }
@@ -152,20 +169,24 @@ public class Payroll {
     public void enterSickDay(String id, double amount) {
         Employee emp = getEmployee(id);
         if(emp == null) {
-            System.out.println("No such employee with id: " + id +" exists in the staff list");
+            System.out.println("Employee " + id + " not found!");
             return;
         }
         emp.useSickDay(amount);
+        if (emp instanceof PartTimeEmployee) System.out.println("New sick days taken: " + emp.getSickDays());
+        else System.out.println("New number of sick days left: " + emp.getSickDays());
     }
 
 
     /**
-     * Resets the number of sick days for every employee (Can't have the start of a year without the start of a
-     * new month).
+     * Resets the number of sick days left for all full time employees, this resets to the number of sick days
+     * full-time employees are allocated a year, currently 20 but can be changed, the variable is YEARLY_SICK_DAYS.
      */
     public void yearlySickDayReset() {
         for (Employee staff: staffList) {
-            staff.resetSickDays();
+            if(staff instanceof FullTimeEmployee) {
+                staff.resetSickDays();
+            }
         }
     }
 

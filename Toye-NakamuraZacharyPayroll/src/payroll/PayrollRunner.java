@@ -3,11 +3,19 @@ package payroll;
 import java.util.Scanner;
 
 /**
- * @author Mr. Cho
+ * @author Mr. Cho ??????? idk
  * @date 2023-12-11
  *
  * A program that lets the user interface with a payroll. It can load data, save data, print pay stubs or employee
- * infomration or
+ * information, and use or reset sick days.
+ * There are still a few bugs/errors.
+ *   - Number of sick days can overflow
+ *   - Pay can become negative if part-time employee uses to many sick days and doesn't have enough hours assigned
+ *   - Inputting an invalid id for using sick days, will still give a prompt to enter the number of sick days
+ *     before telling the user that no employee with that id exists.
+ *   - Negative pay is displayed as $-AMOUNT instead of -$AMOUNT
+ *   - Smallest unit of sick day is never enforced, the user could enter 0.4 sick days or even -346 sick days used.
+ *   - Incorrect spelling in option 5 in the menu
  */
 public class PayrollRunner {
 
@@ -133,7 +141,7 @@ public class PayrollRunner {
         System.out.println("  2. Save staff list to file");
         System.out.println("  3. List all employees");
         System.out.println("  4. Print Pay Stub for employee (ID)");
-        System.out.println("  5. Print Pay Stubs for all empoloyees");
+        System.out.println("  5. Print Pay Stubs for all empoloyees"); // spelt wrong in the sample.
         System.out.println("  6. Use Sick Day (ID)");
         System.out.println("  7. Reset All Full-Time Employee Sick Days");
         System.out.println("  8. Reset All Part-Time Employee Sick Days");
