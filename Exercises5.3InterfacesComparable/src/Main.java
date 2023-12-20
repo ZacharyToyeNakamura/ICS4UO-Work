@@ -53,7 +53,7 @@ import java.util.Random;
         int p1Points = 0, draws = 0;
         for (int i = 0; i < NUM_GAMES; i++) {
             if(p1Dice.get(i).compareTo(p2Dice.get(i)) > 0) p1Points++;
-            else if(p1Dice.get(i).compareTo(p2Dice.get(i)) == 0) draws++;
+            else if(p1Dice.get(i).compareTo(p2Dice.get(i)) == 0) draws++; 
         }
         System.out.println("Results: \n P1 P2");
         for (int i = 0; i < NUM_GAMES; i++) {
