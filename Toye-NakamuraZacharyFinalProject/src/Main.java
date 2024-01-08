@@ -9,7 +9,13 @@ public class Main {
         for (int i = 0; i < messChar.length; i++) {
             result += ((String)(Integer.toBinaryString(messChar[i]))) + " ";
         }
-
-        System.out.println(result);
+//        int start = Integer.parseInt("1000000000", 2);
+//        for(int i = start; i < start * 2; i++) {
+//            System.out.println((char)Integer.parseInt(Integer.toBinaryString(i), 2));
+//        }
+//        System.out.println((char)Integer.parseInt("1100110011", 2));
+        System.out.println(new Character((char)Integer.parseInt("0000000111", 2)));
+//
+//        System.out.println(result);
     }
 }
