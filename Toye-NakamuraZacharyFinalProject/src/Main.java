@@ -9,6 +9,8 @@ public class Main {
         for (int i = 0; i < messChar.length; i++) {
             result += ((String)(Integer.toBinaryString(messChar[i]))) + " ";
         }
+        System.out.println(Integer.toString((char)Integer.parseInt("1100110011", 2)));
+        
 
         System.out.println(result);
     }
