@@ -2,15 +2,15 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.*;
 
 public class Store {
-    private final int ENCODED_CHAR_LEN = 11;
-    private final int ENCODING_CHAR_LEN = ENCODED_CHAR_LEN - 1; // must be greater than 6 for the dummy bit
-    private final int DUMMY_BIT_POS = 6; // position of the dummy bit in each character's unicode binary
-    private final char PADDING_CHAR = ' ';
+    private final static int ENCODED_CHAR_LEN = 11;
+    private final static int ENCODING_CHAR_LEN = ENCODED_CHAR_LEN - 1; // must be greater than 6 for the dummy bit
+    private final static int DUMMY_BIT_POS = 6; // position of the dummy bit in each character's unicode binary
+    private final static char PADDING_CHAR = ' ';
     private boolean encryption = true; // Will the program encrypt the file when it's saved.
+    private final static String ORIGINAL = "abcdefghijklmnopqrstuvxwyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()))_+,./;'[]<>?:\"\\=-1234567890`~ ";
 
     ArrayList<Item> inventory;
 
@@ -49,7 +49,7 @@ public class Store {
      * @param filename
      * @return
      */
-    public boolean saveData(String filename) {
+    public boolean saveInventory(String filename) {
         BufferedWriter writer;
         try {
             writer = new BufferedWriter(new FileWriter(filename));
@@ -90,24 +90,23 @@ public class Store {
      * @return An "encrypted" version of str which can be decoded using decrypt
      */
     public String encrypt(String str, int secret) {
-
-        final String original = "abcdefghijklmnopqrstuvxwyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()))_+,./;'[]<>?:\"\\=-1234567890`~ ";
-        StringBuilder scrambled = new StringBuilder("abcdefghijklmnopqrstuvxwyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()))_+,./;'[]<>?:\"\\=-1234567890`~ ");
+        StringBuilder scrambled = new StringBuilder(ORIGINAL);
         Random rand = new Random(secret);
-        int offset = rand.nextInt(original.length() - 1) + 1;
-        int shift = rand.nextInt(original.length() - 1) + 1; // Shift can't be max len or 0 because it would be useless
+        int offset = rand.nextInt(ORIGINAL.length() - 1) + 1;
+        int shift = rand.nextInt(ORIGINAL.length() - 1) + 1; // Shift can't be max len or 0 because it would be useless
 
         // Swap characters randomly
         for(int i = 0; i < 1000; i++) {
-            int a = rand.nextInt(original.length());
-            int b = rand.nextInt(original.length());
+            int a = rand.nextInt(ORIGINAL.length());
+            int b = rand.nextInt(ORIGINAL.length());
             char temp = scrambled.charAt(a);
             scrambled.setCharAt(a, scrambled.charAt(b));
             scrambled.setCharAt(b, temp);
         }
+        // Used for fast look-ups (can't use integer values because the symbols are scattered in their value)
         Dictionary<Character, Integer> dict = new Hashtable<>();
-        for(int i = 0; i < original.length(); i++) {
-            dict.put(original.charAt(i), i);
+        for(int i = 0; i < ORIGINAL.length(); i++) {
+            dict.put(ORIGINAL.charAt(i), i);
         }
 
         String binaryInput = "";
@@ -116,7 +115,7 @@ public class Store {
             // Shift x over a certain amount. Lastly, add the binary value of the character at the x to shifted input.
             binaryInput +=
                     ((String)(Integer.toBinaryString(scrambled.charAt((
-                            dict.get(str.charAt(i)) + offset + shift * i) % original.length()))));
+                            dict.get(str.charAt(i)) + offset + shift * i) % ORIGINAL.length()))));
         }
         System.out.println("Binary input is " + binaryInput);
         StringBuilder output = new StringBuilder("");
@@ -144,6 +143,41 @@ public class Store {
             }
         }
         return output.toString();
+    }
+
+
+    public String decrypt(String str, int secret) {
+
+        StringBuilder scrambled = new StringBuilder(ORIGINAL);
+        Random rand = new Random(secret);
+        int offset = rand.nextInt(ORIGINAL.length() - 1) + 1;
+        int shift = rand.nextInt(ORIGINAL.length() - 1) + 1; // Shift can't be max len or 0 because it would be useless
+        // Make the exact same swaps
+        for(int i = 0; i < 1000; i++) {
+            int a = rand.nextInt(ORIGINAL.length());
+            int b = rand.nextInt(ORIGINAL.length());
+            char temp = scrambled.charAt(a);
+            scrambled.setCharAt(a, scrambled.charAt(b));
+            scrambled.setCharAt(b, temp);
+        }
+        // Reverse the dictionary keys and values
+        Dictionary<Integer, Character> dict = new Hashtable<>();
+        for(int i = 0; i < ORIGINAL.length(); i++) {
+            dict.put(i, ORIGINAL.charAt(i));
+        }
+        String binaryInput = "";
+        // Convert the string into binary
+        int extraBits = 0; // Number of padding characters at the end
+        for(int i = 0;i < str.length(); i++) {
+            if(i == PADDING_CHAR) {
+                extraBits++;
+            } else {
+                binaryInput += (String)(Integer.toBinaryString(str.charAt(i)));
+            }
+        }
+
+         // remove
+
     }
 
 

@@ -20,7 +20,10 @@ public class Main {
 
 
         Store store = new Store();
-        store.saveData("src/saved.txt");
+        store.saveInventory("src/saved.txt");
         System.out.println(store.encrypt("...............................", 34));
+        Food fod = new Food("Apple", "A red fruit", "PO236270", 1.99, 1.00, 100 , 1705076069, false, false, 1, false);
+        System.out.println(fod.getExpirationDate());
+        System.out.println(fod.isExpired());
     }
 }

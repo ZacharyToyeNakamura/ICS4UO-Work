@@ -3,15 +3,13 @@ public class Item implements Comparable<Item> {
     private String description;
     private String itemId;
     private double price;
-    private int stockLeft;
     private double buyPrice;
+    private int stockLeft;
+    private  int restockAmt;
+
     private boolean isTaxed;
     private final int INF = (int)0x3f3f3f3f;
-
-    @Override
-    public int compareTo(Item i) {
-        return (this.name.compareTo(i.name));
-    }
+    
 
     /**
      * Creates an item
@@ -21,15 +19,16 @@ public class Item implements Comparable<Item> {
      * @param itemId The item's id
      * @param price The price of the item
      * @param buyPrice The price the store buys the item for
-     * @param stockLeft The
+     * @param restockAmt The Amount that the store buys when re-stocking
      */
-    public Item(String name, String description, String itemId, double price, double buyPrice, int stockLeft) {
+    public Item(String name, String description, String itemId, double price, double buyPrice, int restockAmt) {
         this.name = name;
         this.description = description;
         this.itemId = itemId;
         this.price = price;
         this.buyPrice = buyPrice;
-        this.stockLeft = stockLeft;
+        this.restockAmt = restockAmt;
+        this.stockLeft = restockAmt;
         isTaxed = true;
     }
 
@@ -92,7 +91,36 @@ public class Item implements Comparable<Item> {
      */
     public double sell(int amount) {
         if(amount > stockLeft) return -INF;
-        stockLeft -= amount; // NOTE: CHANGE 0.13 to a constant for tax later
-        return amount * (price - price * 1/(1 +0.13) * 0.13 - buyPrice);
+        stockLeft -= amount;
+        return amount * (price - buyPrice);
     }
+
+    /**
+     * Compares 2 items lexicographically, if they have the same name, then it compares them by item id.
+     *
+     * @param i the object to be compared.
+     * @return 0< if this object should come before i, and >0 if i should come before this object.
+     */
+    @Override
+    public int compareTo(Item i) {
+        if (this.name.compareTo(i.name) != 0) {
+            return this.name.compareTo(i.name);
+        }
+        return this.itemId.compareTo(i.itemId);
+    }
+
+    /**
+     * Formats a string nicely for output to the user.
+     *
+     * @return A string nicely formatted with all the information of the item.
+     */
+    @Override
+    public String toString() {
+        return  "Name: " + name + "\n" +
+                "Id:   " + itemId + "\n" +
+                "Price " + price + "\n" +
+                "Stock Left: " + stockLeft + "\n" +
+                "Description: " + description;
+    }
+
 }
