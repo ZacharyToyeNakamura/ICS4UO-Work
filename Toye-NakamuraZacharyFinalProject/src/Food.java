@@ -1,5 +1,10 @@
 import java.time.Instant;
 
+/**
+ * This class stores most of the information that would be food product would require. It has all the methods of item on top of some unique
+ * methdods. It has an expiration date, the amount of food the buyer gets when purchasing, if it's charged per pound,
+ * if it's liquid and if it's vegetarian. Other descriptors like vegan/organic are in the description of the item.
+ */
 public class Food extends Item{
     private long expirationDate;
     private boolean isVegetarian;
@@ -32,6 +37,21 @@ public class Food extends Item{
         this.perPound = perPound;
     }
 
+    /**
+     * @return Whether the food item is vegetarian or not.
+     */
+    public boolean isVegetarian() {
+        return isVegetarian;
+    }
+
+
+    /**
+     * @return Whether the food item is a liquid or not.
+     */
+    public boolean isLiquid() {
+        return isLiquid;
+    }
+
 
     /**
      * If the current unix time is past the unix time of the expiration date then the food has expired
@@ -41,12 +61,42 @@ public class Food extends Item{
     public boolean isExpired () {
         // If the food never expires then it hasn't expired.
         if(expirationDate == -1) return false;
-        return System.currentTimeMillis()/1000L - expirationDate > 0;
+        return System.currentTimeMillis() / 1000L - expirationDate > 0;
     }
 
+    /**
+     * Converts the unix time to a date and time format (human readable time)
+     * @return The date the food expires in YYY-MM-DD at HH-MM-SS format
+     */
     public String getExpirationDate() {
         String time = Instant.ofEpochMilli(expirationDate * 1000L).toString();
         return time.substring(0, 10) + " at " + time.substring(11, 19);
+    }
+
+    /**
+     * @return The expiration date in unix time (number of seconds since Jan 1st, 1970)
+     */
+    public long getUnixExpDate() {
+        return expirationDate;
+    }
+
+
+    /**
+     * @return Returns a nicely formatted string with all the information of the food item
+     *         to be printed to the user. It includes the units as part of the price of the food.
+     */
+    @Override
+    public String toString() {
+        String units = " each";
+        if(perPound) units = " /" + amount + "lbs"; // prioritize per pound, but really both shouldn't be true at the same time.
+        else if(isLiquid) units = " /" + amount + "ml";
+        return  "Name:  " + name + "\n" +
+                "Id:    " + itemId + "\n" +
+                "Price: " + price + units + "\n" +
+                "Stock Left: " + stockLeft + "\n" +
+                "Vegetarian: " + isVegetarian + "\n" +
+                "Liquid: " + isLiquid + "\n" + 
+                "Description: " + description;
     }
 
 

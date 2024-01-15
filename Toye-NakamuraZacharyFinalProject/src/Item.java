@@ -1,14 +1,14 @@
 public class Item implements Comparable<Item> {
-    private String name;
-    private String description;
-    private String itemId;
-    private double price;
-    private double buyPrice;
-    private int stockLeft;
-    private  int restockAmt;
+    protected String name;
+    protected String description;
+    protected String itemId;
+    protected double price;
+    protected double buyPrice;
+    protected int stockLeft;
+    protected int restockAmt;
 
-    private boolean isTaxed;
-    private final int INF = (int)0x3f3f3f3f;
+    protected boolean isTaxed;
+    protected final int INF = (int)0x3f3f3f3f;
     
 
     /**
@@ -110,15 +110,17 @@ public class Item implements Comparable<Item> {
     }
 
     /**
-     * Formats a string nicely for output to the user.
+     * Formats a string nicely for output to the user. The description of the item should always
+     * be at the bottom of the information. It only displays the information a customer and/or cashier 
+     * would need to see. 
      *
      * @return A string nicely formatted with all the information of the item.
      */
     @Override
     public String toString() {
-        return  "Name: " + name + "\n" +
-                "Id:   " + itemId + "\n" +
-                "Price " + price + "\n" +
+        return  "Name:  " + name + "\n" +
+                "Id:    " + itemId + "\n" +
+                "Price: " + price + "\n" +
                 "Stock Left: " + stockLeft + "\n" +
                 "Description: " + description;
     }
