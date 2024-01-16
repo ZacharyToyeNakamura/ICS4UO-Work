@@ -20,18 +20,29 @@ public class Main {
 
 
         Store store = new Store();
-        store.saveInventory("src/saved.txt");
+        // store.saveInventory("src/saved.txt");
+        store.saveInventory("/workspaces/javaG12/Toye-NakamuraZacharyFinalProject/src/saved.txt");
         // System.out.println(store.encrypt("...............................", 34));
         // Food fod = new Food("Apple", "A red fruit", "PO236270", 1.99, 1.00, 100 , 1705076069, false, false, 1, false);
         // System.out.println(fod.getExpirationDate());
         // System.out.println(fod.isExpired());
-        store.loadData("src/saved.txt");
-        String s = "abcdefghijklmnopqrstuvxwyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()))_+,./;'[]<>?:\"\\=-1234567890`~ ";
-        for(int i = 0; i < s.length(); i++) {
-            if(String.format("%08d",Integer.parseInt(Integer.toBinaryString(s.charAt(i)))).length() != 8) {
-                System.out.println(String.format("%08d",Integer.parseInt(Integer.toBinaryString(s.charAt(i)))));
+        // store.loadData("src/saved.txt");
+        for(int i = 0; i < 1000; i++) {
+            store.saveInventory("/workspaces/javaG12/Toye-NakamuraZacharyFinalProject/src/saved.txt");
+            store.loadData("/workspaces/javaG12/Toye-NakamuraZacharyFinalProject/src/saved.txt");
+            try {
+                Thread.sleep(10);
+            } catch(InterruptedException iox) {
+                System.out.println("sleep eeor" + iox.getMessage());
             }
         }
-        System.out.println(-2%5);
+        
+        // String s = "abcdefghijklmnopqrstuvxwyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+,./;'[]<>?:\"\\=-1234567890`~ ";
+        // for(int i = 0; i < s.length(); i++) {
+        //     if(String.format("%08d",Integer.parseInt(Integer.toBinaryString(s.charAt(i)))).length() != 8) {
+        //         System.out.println(String.format("%08d",Integer.parseInt(Integer.toBinaryString(s.charAt(i)))));
+        //     }
+        // }
+
     }
 }
