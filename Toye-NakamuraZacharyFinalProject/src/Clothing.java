@@ -19,9 +19,9 @@ public class Clothing extends Item {
      * @param size The size of the clothing (ex. XL, S, M, L or 23M, 9F for shoes etc.)
      * @param catagory The catagory of clothing, or season I guess, (Summer, Winter, etc.)
      */
-    public Clothing(String name, String description, String itemId, double price, double buyPrice, int restockAmt,
-                    String type, String size, String catagory, String fabricType, String color) {
-        super(name, description, itemId, price, buyPrice, restockAmt);
+    public Clothing(String name, String description, String itemId, String business, double price, double buyPrice,
+                    int restockAmt, String type, String size, String catagory, String fabricType, String color) {
+        super(name, description, itemId, business, price, buyPrice, restockAmt);
         this.type = type;
         this.size = size;
         this.catagory = catagory;

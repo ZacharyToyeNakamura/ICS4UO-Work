@@ -27,9 +27,10 @@ public class Food extends Item{
      *               otherwise it's per item
      * @param perPound If the amount is in pounds.
      */
-    public Food(String name, String description, String itemId, double price, double buyPrice, int restockAmt,
-                long expirationDate, boolean isVegetarian, boolean isLiquid, double amount, boolean perPound) {
-        super(name, description, itemId, price, buyPrice, restockAmt);
+    public Food(String name, String description, String itemId, String business, double price, double buyPrice,
+                int restockAmt, long expirationDate, boolean isVegetarian, boolean isLiquid, double amount,
+                boolean perPound) {
+        super(name, description, itemId, business, price, buyPrice, restockAmt);
         this.expirationDate = expirationDate;
         this.isVegetarian = isVegetarian;
         this.isLiquid = isLiquid;
@@ -87,13 +88,15 @@ public class Food extends Item{
      */
     @Override
     public String toString() {
+        // Always want the description last.
         String units = " each";
         if(perPound) units = " /" + amount + "lbs"; // prioritize per pound, but really both shouldn't be true at the same time.
         else if(isLiquid) units = " /" + amount + "ml";
         return  "Name:  " + name + "\n" +
                 "Id:    " + itemId + "\n" +
-                "Price: " + price + units + "\n" +
+                "Price: $" + price + units + "\n" +
                 "Stock Left: " + stockLeft + "\n" +
+                "Producer: " + business + "\n" +
                 "Vegetarian: " + isVegetarian + "\n" +
                 "Liquid: " + isLiquid + "\n" + 
                 "Description: " + description;

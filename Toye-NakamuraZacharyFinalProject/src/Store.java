@@ -4,11 +4,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Note: Unknown effects some with changing final static fields: To change the "encryption" scheme, save a plain text
+ * file, then change final static fields, then load the plain text file and save it as an "encrypted" file.
+ *
+ * This class contains all the items in the store and can
+ *
+ */
 public class Store {
-    private final static int ENCODED_CHAR_LEN = 11;
+    private final static int ENCODED_CHAR_LEN = 11; // The number of bits a encoded character represents.
     private final static int ENCODING_CHAR_LEN = ENCODED_CHAR_LEN - 1; // must be greater than 6 for the dummy bit
     private final static int DUMMY_BIT_POS = 6; // position of the dummy bit in each character's unicode binary (from the right, 1 based indexing)
-    private final static char PADDING_CHAR = ' ';
+    private final static char PADDING_CHAR = ' '; // The character that symbolizes an extra bit.
     private boolean encryption = true; // Will the program encrypt the file when it's saved.
    private final static String ORIGINAL = "abcdefghijklmnopqrstuvxwyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+,./;'[]<>?:\"\\=-1234567890`~ \n\r";
     // private final static String ORIGINAL = "abcde";
@@ -107,26 +114,44 @@ public class Store {
         return true;
     }
 
+    /**
+     * Pads a string with 0 to the left. If adds numDigits-str.length() 0s to the left of the string
+     * This method is used instead of String.format("%010d",Long.parseLong(. . . . )); because that would break when
+     * the binary inside is greater than 2^63 (I think)
+     *
+     * @param str The string that is to be padded with 0s
+     * @param numDigits The number of digits the string should have.
+     * @return The string padded with 0s to the left.
+     */
+    public static String padLZeros(String str, int numDigits) {
+        while(str.length() < numDigits) {
+            str = "0" + str;
+        }
+        return str;
+    }
+
 
     /**
      * Scrambles a string in a way so that it's harder to read. DO NOT USE security purposes,
      * it's probably easy to crack due to not using very large prime numbers and the usage of java's random library.
      * It uses java's random library to generate shift amounts and shifts every character in the input over [Similar to a single rotor engima machine]
      * Then converts each character of the string to binary, making a long string of 0s and 1s.  [This is kinda related to b64 encoding]
-     * Lastly if takes chunks of 10 bits adds a dummy bit at position 6 (to make sure it's a valid readable character) and 
+     * Lastly it takes chunks of 10 bits adds a dummy bit at position 6 (to make sure it's a valid readable character) and
      * converts the chunk to unicode. Padding characters are added if there aren't enough bits for the last new character.
      * PADDING_CHAR is added to the end of the "encrypted" string for the number of dummy bits.
      * 
      * Continuations:
-     * Would add hamming codes (error correcting codes) if I had time.
-     * maybe use SecureRandom instead of random (Or make something that doesn't require random)
+     * Make random shifts each time instead of the same shift
+     * Add hamming codes (error correcting codes). if extra time
+     * Maybe use SecureRandom instead of random (Or make something that doesn't require random)
      * Scramble more by implementing a cipher as well as the rest of a more complex enigma machine.
+     * Use of vector space encryption? Seems hard
      *
-     * @param str the string that is to be encrypted
+     * @param str The string that is to be scrambled or "encrypted"
      * @param secret A random number that it used as the seed for java's random number generator.
      * @return An "encrypted" version of str which can be decoded using decrypt
      */
-    public String encrypt(String str, int secret) {
+    public static String encrypt(String str, int secret) {
         
         StringBuilder scrambled = new StringBuilder(ORIGINAL);
         // System.out.println("secret " +secret);
@@ -156,8 +181,8 @@ public class Store {
             // Shift x over a certain amount. Lastly, add the binary value of the character at the x to shifted input.
             // System.out.println(str.charAt(i) + " i: "+ i + " " + str);
             // System.out.println(dict.get(str.charAt(i)));
-            binaryInput +=  String.format("%08d",Long.parseLong((Integer.toBinaryString(scrambled.charAt((
-                            dict.get(str.charAt(i)) + offset + shift * i) % ORIGINAL.length())))));
+            binaryInput +=  padLZeros((Integer.toBinaryString(scrambled.charAt((
+                    dict.get(str.charAt(i)) + offset + shift * i) % ORIGINAL.length()))), 8);
             // System.out.println("Char " + scrambled.charAt((dict.get(str.charAt(i)) + offset + shift * i) % ORIGINAL.length()));
             // System.out.print(scrambled.charAt((dict.get(str.charAt(i)) + offset + shift * i) % ORIGINAL.length()));
         }
@@ -199,7 +224,14 @@ public class Store {
     }
 
 
-    public String decrypt(String str, int secret) {
+    /**
+     * Converts an "encrypted" string to plain text which can be read by humans.
+     *
+     * @param str The scrambled string
+     * @param secret The random number used by Java's random function
+     * @return
+     */
+    public static String decrypt(String str, int secret) {
         // System.out.println("Decrypting . . .");
         StringBuilder scrambled = new StringBuilder(ORIGINAL);
         // System.out.println("secret " +secret);
@@ -226,8 +258,7 @@ public class Store {
         // Convert the string into binary
         int extraBits = 0; // Number of padding characters at the end
         for(int i = 0; i < str.length(); i++) {
-            // System.out.println(Long.parseLong(Integer.toBinaryString(str.charAt(i))) + " " + str.charAt(i));
-            String binaryChar = String.format("%011d", Long.parseLong(Integer.toBinaryString(str.charAt(i))));
+            String binaryChar = padLZeros(Integer.toBinaryString(str.charAt(i)),11);
             // System.out.println("Binary char " + binaryChar);
             if (str.charAt(i) == PADDING_CHAR) {
                 extraBits++;
@@ -247,29 +278,49 @@ public class Store {
         String output = "";
         // Convert groups of 8 bits to unicode characters then shift it by the scramble and shift amount.
         for(int i = 0; i < binaryInput.length() / 8; i++) {
-            // if(Integer.parseInt(binaryInput.substring(i*8, (i+1)*8),2) < 8) {
-            //     System.out.println("Error: Character with a unicode value less than 32 found (This may cause data to not load properly). The binary is: " + binaryInput.substring(i*8, (i+1)*8));
-            //     continue;
-            // }
-            // System.out.println("The character that doesnt work is" + (char)Integer.parseInt(binaryInput.substring(i*8, (i+1)*8),2) + " " + Integer.parseInt(binaryInput.substring(i*8, (i+1)*8),2));
-            int charPlace = (dict.get((char)Integer.parseInt(binaryInput.substring(i*8, (i+1)*8),2)) - offset - shift * i) % ORIGINAL.length();
+            // These are non-printable character, if this message ever triggers there's probably an off by 1 error
+            // Which make 1 character different. mostly likely not breaking everything too much unless it's a critical
+            // character ex a separating comma.
+             if(Integer.parseInt(binaryInput.substring(i*8, (i+1)*8),2) < 8) {
+                 System.out.println("Error: Character with a unicode value less than 32 found (This may cause data to not load properly). The binary is: " + binaryInput.substring(i*8, (i+1)*8));
+                 continue;
+             }
+             // Convert the binary to a character, find its position in the scrambled, and shift it.
+            int charPlace = (dict.get((char)Integer.parseInt(binaryInput.substring(i*8, (i+1)*8),2))
+                    - offset - shift * i) % ORIGINAL.length();
             // System.out.println(dict.get((char)Integer.parseInt(binaryInput.substring(i*8, (i+1)*8),2)) - offset - shift * i + " % "  + ORIGINAL.length());
             // System.out.println(binaryInput.substring(i*8, (i+1)*8));
-            if(charPlace < 0) { // ensure that it's not a negative number
+
+            // ensure that it's not a negative number, if it is then wrap around to the other end.
+            if(charPlace < 0) {
                 charPlace += ORIGINAL.length();
-                // System.out.println("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
             }
-            // System.out.println(charPlace + " ");
-//            System.out.println("Next char " + ORIGINAL.charAt(charPlace));
 
             output += ORIGINAL.charAt(charPlace);
         }
-        // System.out.println();
-
-
          return output;
-
     }
 
+
+    /**
+     * Finds the index of an item with the name or id of the parameter "nameOrId"
+     *
+     * @param nameOrId The name or id of the item
+     * @return The index in inventory the item is.
+     */
+    public int findItem(String nameOrId) {
+        for (int i = 0; i < inventory.size(); i++) {
+            if(inventory.get(i).getName() == nameOrId || inventory.get(i).getItemId() == nameOrId) return i;
+        }
+        return -1;
+    }
+
+    /**
+     * Permanently changes the order of the items to alphabetically sorted.
+     *
+     */
+    public void permSort() {
+
+    }
 
 }
