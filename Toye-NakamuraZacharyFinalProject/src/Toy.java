@@ -56,6 +56,14 @@ public class Toy extends Item{
     }
 
 
+    /**
+     * @return The deparment that the item is part of.
+     */
+    @Override
+    public String getDeparment() {
+        return "toys";
+    }
+
     @Override
     public String toString() {
         String output = super.toString();

@@ -75,6 +75,14 @@ public class Food extends Item{
     }
 
     /**
+     * @return The deparment that the item is part of.
+     */
+    @Override
+    public String getDeparment() {
+        return "food";
+    }
+
+    /**
      * @return The expiration date in unix time (number of seconds since Jan 1st, 1970)
      */
     public long getUnixExpDate() {

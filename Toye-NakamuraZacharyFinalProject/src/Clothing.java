@@ -66,6 +66,14 @@ public class Clothing extends Item {
     }
 
     /**
+     * @return The deparment that the item is part of.
+     */
+    @Override
+    public String getDeparment() {
+        return "clothing";
+    }
+
+    /**
      * @return Returns a nicely formatted string with all the information of the food item
      *         to be printed to the user. It includes the units as part of the price of the food.
      */

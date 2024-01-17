@@ -17,15 +17,37 @@ public class Store {
     private final static int DUMMY_BIT_POS = 6; // position of the dummy bit in each character's unicode binary (from the right, 1 based indexing)
     private final static char PADDING_CHAR = ' '; // The character that symbolizes an extra bit.
     private boolean encryption = true; // Will the program encrypt the file when it's saved.
-   private final static String ORIGINAL = "abcdefghijklmnopqrstuvxwyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+,./;'[]<>?:\"\\=-1234567890`~ \n\r";
-    // private final static String ORIGINAL = "abcde";
-    ArrayList<Item> inventory;
+    private final static String ORIGINAL = "abcdefghijklmnopqrstuvxwyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+,./;'[]<>?:\"\\=-1234567890`~ \n\r";
+    
+
+    private final static double TAX_PERCENT = 1.13;
+    private ArrayList<Item> inventory;
 
     /**
      * Initializes the array list and creates a store object
      */
     public Store() {
         inventory = new ArrayList<>();
+    }
+
+    /**
+     * @return The number of items in the stores inventory
+     */
+    public int getInventorySize() {
+        return inventory.size();
+    }
+
+    /**
+     * Acts like .get() for an array list, returning the element at the idxth position.
+     * 
+     * @param idx The position of the element that is needed.
+     * @return the item in position, or null if idx is out of range.
+     */
+    public Item getItem(int idx) {
+        if(idx < 0 || idx >= inventory.size()) {
+            return null;
+        }
+        return inventory.get(idx);
     }
 
 
@@ -303,7 +325,8 @@ public class Store {
 
 
     /**
-     * Finds the index of an item with the name or id of the parameter "nameOrId"
+     * Finds the index of an item with the name or id of the parameter "nameOrId".
+     * For binary search you first search on the name, then if it doesn't exist search on the id. <TODO>
      *
      * @param nameOrId The name or id of the item
      * @return The index in inventory the item is.
@@ -317,10 +340,51 @@ public class Store {
 
     /**
      * Permanently changes the order of the items to alphabetically sorted.
-     *
      */
     public void permSort() {
+        Collections.sort(inventory);
+    }
+
+    /**
+     * Sorts the inventory alphabetically, but doesn't alter the current order of the inventory.
+     * 
+     * @return A new array list that is the sorted version of the current inventory.
+     */
+    public ArrayList<Item> tempSort() {
+        ArrayList<Item> temp = new ArrayList<>(inventory);
+        Collections.sort(temp);
+        return temp;
+    }
+
+    /**
+     * Restocks all items in the inventory to their restock amount.
+     * Spends money according to amount of items restocked.
+     */
+    public void restock() {
+        for(int i = 0; i < inventory.size(); i++) {
+            inventory.get(i).restock();
+        }
+    }
+
+    /**
+     * Sells an amount of item, assumes that the amount is valid.
+     * 
+     * @param nameOrId The name or id of the item being sold
+     * @param amount The amount of item being sold
+     * @return The amount the customer would paid 
+     */
+    public double sell(String nameOrId, int amount) {
+        double returnFlag = inventory.get(findItem(nameOrId)).sell(amount);
+        if(returnFlag == -2) {
+            System.out.println("Error: Not enough stock left");
+            return -2;
+        }
+        return returnFlag;
 
     }
+
+    
+
+    
 
 }

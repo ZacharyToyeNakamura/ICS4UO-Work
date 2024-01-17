@@ -10,6 +10,7 @@ public class Item implements Comparable<Item> {
     protected double buyPrice; // The price of the item that the store buys it for (there is never tax for this)
     protected int stockLeft; // The amount of items the store has left
     protected int restockAmt; // The amount of items the store restocks to when they restock
+    protected double netProfit;
 
     protected boolean isTaxed; // If the item is taxed or not.
     public final int INF = (int)0x3f3f3f3f; // A return value for invalid
@@ -36,6 +37,7 @@ public class Item implements Comparable<Item> {
         this.buyPrice = buyPrice;
         this.restockAmt = restockAmt;
         this.stockLeft = restockAmt;
+        netProfit -= buyPrice * restockAmt;
         isTaxed = true;
     }
 
@@ -88,19 +90,47 @@ public class Item implements Comparable<Item> {
     }
 
     /**
+     * @return The deparment that the item is part of.
+     */
+    public String getDeparment() {
+        return "None";
+    }
+
+    /**
      * The store sold some amount of this item.
      * Return codes:
-     * -INF if there isn't enough stock left
+     * -2 if there isn't enough stock left
      * Otherwise the amount of profit made. (Tax is not profit)
      *
      * @param amount the amount of the item is bought
      * @return The net profit made by the store.
      */
     public double sell(int amount) {
-        if(amount > stockLeft) return -INF;
+        if(amount > stockLeft) return -2;
         stockLeft -= amount;
-        return amount * (price - buyPrice);
+        netProfit -= amount * (price - buyPrice);
+        return amount * price;
     }
+
+    /**
+     * Restocks the inventory of the item and returns the cost to restock.
+     * If there is more stock than restockAmt then it does nothing.
+     * 
+     * @return The amount it cost to restock
+     */
+    public void restock() {
+        if(stockLeft >= restockAmt) return;
+        stockLeft = restockAmt;
+        netProfit -= (restockAmt - stockLeft) * buyPrice;
+    }
+
+    /**
+     * @return Just the name and id of the item in a slightly formatted string.
+     */
+    public String shortInfo() {
+        return name + ": " + itemId;
+    }
+
 
     /**
      * Compares 2 items lexicographically, if they have the same name, then it compares them by item id.
