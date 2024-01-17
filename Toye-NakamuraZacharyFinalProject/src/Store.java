@@ -156,6 +156,8 @@ public class Store {
     /**
      * Scrambles a string in a way so that it's harder to read. DO NOT USE security purposes,
      * it's probably easy to crack due to not using very large prime numbers and the usage of java's random library.
+     * Not revealing the secret number (by hardcoding it or smt) would make it more secure against people who know
+     * what they are doing, otherwise it can be a large random number.
      * It uses java's random library to generate shift amounts and shifts every character in the input over [Similar to a single rotor engima machine]
      * Then converts each character of the string to binary, making a long string of 0s and 1s.  [This is kinda related to b64 encoding]
      * Lastly it takes chunks of 10 bits adds a dummy bit at position 6 (to make sure it's a valid readable character) and
@@ -271,6 +273,7 @@ public class Store {
            scrambled.setCharAt(b, temp);
        }
         // Reverse the dictionary keys and values
+        // So scrambled -> location in array (later -> original)
         Dictionary<Character, Integer> dict = new Hashtable<>();
         for(int i = 0; i < scrambled.length(); i++) {
             dict.put(scrambled.charAt(i), i);

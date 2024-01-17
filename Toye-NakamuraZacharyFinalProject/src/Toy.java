@@ -60,7 +60,7 @@ public class Toy extends Item{
      * @return The deparment that the item is part of.
      */
     @Override
-    public String getDeparment() {
+    public String getDepartment() {
         return "toys";
     }
 

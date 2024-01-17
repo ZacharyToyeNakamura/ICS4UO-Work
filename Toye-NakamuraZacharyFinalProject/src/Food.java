@@ -6,25 +6,25 @@ import java.time.Instant;
  * if it's liquid and if it's vegetarian. Other descriptors like vegan/organic are in the description of the item.
  */
 public class Food extends Item{
-    private long expirationDate;
-    private boolean isVegetarian;
-    private boolean isLiquid;
-    private double amount; // How much you get per purchase ex 100g or 1 apple
-    private boolean perPound;
+    private long expirationDate; // The date in unix when the product expires.
+    private boolean isVegetarian; // If the product is vegetarian or not.
+    private boolean isLiquid; // If the product is a liquid or not.
+    private double amount; // How much you get per purchase ex 100g or 1 apple.
+    private boolean perPound; // If the product is purchased per pound.
     /**
-     * Creates an item
+     * Creates a food item, with all of its parameters.
      *
-     * @param name        The name of the item
-     * @param description A short description of the item
-     * @param itemId      The item's id
-     * @param price       The price of the item
-     * @param buyPrice    The price the store buys the item for
-     * @param restockAmt  The Amount that the store buys when re-stocking
-     * @param expirationDate The date in unix time when the product expires, -1 for N/A
-     * @param isVegetarian If the food is vegetarian or not
-     * @param isLiquid If the food item is a liquid or not
+     * @param name        The name of the item.
+     * @param description A short description of the item.
+     * @param itemId      The item's id.
+     * @param price       The price of the item.
+     * @param buyPrice    The price the store buys the item for.
+     * @param restockAmt  The Amount that the store buys when re-stocking.
+     * @param expirationDate The date in unix time when the product expires, -1 for N/A.
+     * @param isVegetarian If the food is vegetarian or not.
+     * @param isLiquid If the food item is a liquid or not.
      * @param amount How much the buyer gets with 1 purchase (in mL if isLiquid is true, in lbs if perPound is true)
-     *               otherwise it's per item
+     *               otherwise it's per item.
      * @param perPound If the amount is in pounds.
      */
     public Food(String name, String description, String itemId, String business, double price, double buyPrice,
@@ -78,7 +78,7 @@ public class Food extends Item{
      * @return The deparment that the item is part of.
      */
     @Override
-    public String getDeparment() {
+    public String getDepartment() {
         return "food";
     }
 

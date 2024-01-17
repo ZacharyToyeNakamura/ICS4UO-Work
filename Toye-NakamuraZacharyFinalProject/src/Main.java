@@ -26,8 +26,9 @@ public class Main {
         System.out.println("1. Edit items."); // Note not every attribute can be changed, that would be fraud
         System.out.println("2. Display information.");
         System.out.println("3. Sell items.");
-        System.out.println("4. Permantly sort the order of items.");
-        System.out.println("5. Exit the program.");
+        System.out.println("4. Add/Remove items.");
+        System.out.println("5. Permanently sort the order of items.");
+        System.out.println("6. Exit the program.");
     }
 
     /**
@@ -44,16 +45,16 @@ public class Main {
      */
     public static void printDisInfoMenu() {
         System.out.println("1. Display information for 1 item.");
-        System.out.println("2. Display information for 1 catagory of items");
+        System.out.println("2. Display information for 1 category of items");
         System.out.println("3. Display information for all items.");
         System.out.println("4. Go back");
     }
 
     /**
-     * The menu inside printEditMenu(), it asks asks the user what they what to edit about the 
+     * The menu inside printEditMenu(), it asks the user what they what to edit about the
      * item.
      * 
-     * @param multi True if the user is editting multiple values, false if not.
+     * @param multi True if the user is editing multiple values, false if not.
      */
     public static void printEditItem(boolean multi) {
         System.out.print("1. Edit name of item");
@@ -72,7 +73,7 @@ public class Main {
     }
 
     /**
-     * Get a valid number from the user, it repeatidly asks them if they don't enter a 
+     * Get a valid number from the user, it repeatedly asks them if they don't enter a
      * 
      * @param low The minimum number the user's input can be to be valid
      * @param high The max number the user's input can be to be valid
@@ -128,28 +129,38 @@ public class Main {
         // Temp variable used to store user input
         String userInput = "";
         // The current menu
-        // 0 is the main, 1 is edit items, 2 display info, 3 sell items, 4 which attribute is going to be editted (in edit items) but editting just 1 value.
-        // 5 is the same as menu 4 but editing ALL items
+        // 0 is the main, 1 is edit items, 2 display info, 3 sell items, 4 is adding/deleting items
+        // 5 which attribute is going to be edited (in edit items) but editing just 1 value.
+        // 6 is the same as menu 4 but editing ALL items
         int curMenu = 0;
-        while(userChoice != 5) {
+        while(userChoice != 6) {
+            System.out.println(userChoice);
             switch (curMenu) {
                 case 0:
                     printMainMenu();
-                    curMenu = getMenuInput(1, 5);
+                    userChoice = getMenuInput(1, 6);
+                    if(userChoice == 5) {
+                        store.permSort();
+                        System.out.println("The items have been put in ");
+                    } else if(userChoice != 6) { // not 5 or 6
+                        curMenu = userChoice;
+                    }
                     break;
 
                 case 1:
                     printEditMenu();
-                    curMenu = getMenuInput(1, 3) + 3;
-                    if(curMenu == 6) {
+                    userChoice = getMenuInput(1, 3);
+                    if(userChoice == 3) { // go back
                         curMenu = 0; 
+                    } else {
+                        curMenu = userChoice + 4;
                     }
                     break;
 
                 case 2:
                     printDisInfoMenu();
                     userChoice = getMenuInput(1, 4);
-                    if(userChoice == 4) {
+                    if(userChoice == 4) { // go back
                         curMenu = 0;
                         break;
                     }
@@ -162,27 +173,28 @@ public class Main {
                         case 2:
                             userInput = "";
                             boolean firstTime = false;
-                            while(userInput != "food" && userInput != "clothing" && userInput != "toys" && userInput != "none") { 
-                                System.out.println("Valid catagories are: Food, Clothing, Toys, None");
-                                System.out.print("Enter which catagory you would like to see info for: ");
+                            while(!userInput.equals("food") && !userInput.equals("clothing") &&
+                                    !userInput.equals("toys") && !userInput.equals("none")) {
+                                System.out.println("Valid categories are: Food, Clothing, Toys, None");
+                                System.out.print("Enter which category you would like to see info for: ");
                                 userInput = input.nextLine().toLowerCase();
                                 if(!firstTime) {
                                     firstTime = true;
                                 } else { // Display an error message if it's not the first time asking the user for input
-                                    System.out.println("Invalid catagory. Please enter a valid catagory");
+                                    System.out.println("Invalid category. Please enter a valid category");
                                 }
                             }
                             boolean atleastOne = false;
                             for(int i = 0; i < store.getInventorySize(); i++) {
-                                // Only print the items that are part of the deparment
-                                if(store.getItem(i).getDeparment().equals(userInput)) {
+                                // Only print the items that are part of the department
+                                if(store.getItem(i).getDepartment().equals(userInput)) {
                                     System.out.println(store.getItem(i));
                                     atleastOne = true;
                                 }
                             }
-                            // Print a message if there are no items in the deparment
+                            // Print a message if there are no items in the department
                             if(!atleastOne) {
-                                System.out.println("There are no items in that catagory");
+                                System.out.println("There are no items in that category");
                             }
                             break;
 
@@ -200,7 +212,8 @@ public class Main {
                     break;
 
                 case 3:
-                    System.out.println("Transaction Started. Enter -1 to any prompt to cancel this transaction.");
+                    // Canceling the transaction would be a pain to do, its easier not to. (limited time)
+                    System.out.println("Transaction Started.");
                     userInput = "";
                     ArrayList<String> receipt = new ArrayList<>();
                     receipt.add("Sales transaction: ");
@@ -209,13 +222,8 @@ public class Main {
                         // Get user input
                         System.out.println("1. Sell an item");
                         System.out.println("2. Finish transaction");
-                        System.out.println("3. Cancel transaction");
                         System.out.print("> ");
-                        userChoice = getMenuInput(1, 3);
-                        if(userChoice == 3) {
-                            curMenu = 0;
-                            break;
-                        }
+                        userChoice = getMenuInput(1, 2);
                         if(userChoice == 1) {
                             System.out.print("Enter the name or ID of the id being sold: ");
                             Item requestedItem = store.getItem(getValidItem());
@@ -223,7 +231,7 @@ public class Main {
                             try {
                                 System.out.println("There are " + requestedItem.getStockLeft() + " units of " + 
                                                     requestedItem.getName() + " left"); 
-                                System.out.print("Enter the quantity being purcahsed: "); // Enter the number of units being sold:
+                                System.out.print("Enter the quantity being purchased: "); // Enter the number of units being sold:
                                 amountSold = Integer.parseInt(input.nextLine());
                                 if(amountSold <= 0) {
                                     System.out.println("Please enter a positive non-zero integer amount.");
@@ -247,6 +255,7 @@ public class Main {
                             for (int i = 0; i < receipt.size(); i++) {
                                 System.out.println(receipt.get(i));
                             }
+                            curMenu = 0;
                         }
 
                     }
