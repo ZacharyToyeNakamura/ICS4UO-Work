@@ -20,7 +20,6 @@ public class Main {
         System.out.println("\t\tWelcome to GSS software");
         System.out.println("To use this program, just enter the number beside the action you would like to preform.");
         System.out.println("Then follow any following prompts.");
-        printMainMenu();
     }
 
     public static void printMainMenu() {
@@ -143,7 +142,7 @@ public class Main {
                     printEditMenu();
                     curMenu = getMenuInput(1, 3) + 3;
                     if(curMenu == 6) {
-                        curMenu = 0;
+                        curMenu = 0; 
                     }
                     break;
 
@@ -251,7 +250,14 @@ public class Main {
                         }
 
                     }
-                    
+                case 4:
+                    printEditItem(false);
+                     
+                    break;
+
+
+                case 5:
+                    break;
 
             
                 default:
