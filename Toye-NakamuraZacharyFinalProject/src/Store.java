@@ -20,7 +20,7 @@ public class Store {
     private final static String ORIGINAL = "abcdefghijklmnopqrstuvxwyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+,./;'[]<>?:\"\\=-1234567890`~ \n\r";
     
 
-    private final static double TAX_PERCENT = 1.13;
+    public final static double TAX_PERCENT = 1.13;
     private ArrayList<Item> inventory;
 
     /**
@@ -48,6 +48,23 @@ public class Store {
             return null;
         }
         return inventory.get(idx);
+    }
+
+
+    /**
+     * Removes an item from the inventory, (Note: This will remove it's profit)
+     * This means that the store is no longer tracking anything related to the removed item.
+     * 
+     * @param nameOrId The name or id of the item that is to be removed.
+     * @return True if the item was removed, false if there was no item to remove with the name or id
+     */
+    public boolean removeItem(String nameOrId) {
+        int toRemove = findItem(nameOrId);
+        if(toRemove == -1) {
+            return false;
+        }
+        inventory.remove(toRemove);
+        return true;
     }
 
 

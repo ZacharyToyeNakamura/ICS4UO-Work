@@ -29,13 +29,14 @@ public class Food extends Item{
      */
     public Food(String name, String description, String itemId, String business, double price, double buyPrice,
                 int restockAmt, long expirationDate, boolean isVegetarian, boolean isLiquid, double amount,
-                boolean perPound) {
+                boolean perPound, boolean isTaxed) {
         super(name, description, itemId, business, price, buyPrice, restockAmt);
         this.expirationDate = expirationDate;
         this.isVegetarian = isVegetarian;
         this.isLiquid = isLiquid;
         this.amount = amount;
         this.perPound = perPound;
+        this.isTaxed = isTaxed; // Most food products aren't taxed except candy
     }
 
     /**

@@ -26,9 +26,10 @@ public class Main {
         System.out.println("1. Edit items."); // Note not every attribute can be changed, that would be fraud
         System.out.println("2. Display information.");
         System.out.println("3. Sell items.");
-        System.out.println("4. Add/Remove items.");
-        System.out.println("5. Permanently sort the order of items.");
-        System.out.println("6. Exit the program.");
+        System.out.println("4. Add a item.");
+        System.out.println("5. Remove a item.");
+        System.out.println("6. Permanently sort the order of items.");
+        System.out.println("7. Exit the program.");
     }
 
     /**
@@ -133,16 +134,46 @@ public class Main {
         // 5 which attribute is going to be edited (in edit items) but editing just 1 value.
         // 6 is the same as menu 4 but editing ALL items
         int curMenu = 0;
-        while(userChoice != 6) {
+        while(userChoice != 7) {
             System.out.println(userChoice);
-            switch (curMenu) {
+            switch (curMenu) {  
                 case 0:
                     printMainMenu();
-                    userChoice = getMenuInput(1, 6);
-                    if(userChoice == 5) {
+                    userChoice = getMenuInput(1, 7);
+                    if(userChoice == 4) {
+                        // Adding an item
+                        System.out.println("Which deparment is the item part of? ");
+                        System.out.println("1. Food");
+                        System.out.println("2. Clothing");
+                        System.out.println("3. Toys");
+                        System.out.println("4. None of the above");
+                        userChoice = getMenuInput(1, 4);
+                        
+                        System.out.print("Enter the name of the item: ");
+                        String newItemName = input.nextLine();
+                        System.out.print("Enter the description of the item: ");
+                        String newItemDesc = input.nextLine();
+                        System.out.print("Enter the ID of the item: ");
+                        String newItemId = input.nextLine();
+                        System.out.print("Enter the manufactor/producer of the item: ");
+                        String newItemBusiness = input.nextLine();
+                        System.out.print("Enter the selling price of the item: ");
+                        String newItemPrice = input.nextLine();
+                        System.out.print("Enter the price the store buys the item for: ");
+                        String newItemBuyPrice = input.nextLine();
+
+
+                    } if(userChoice == 5) {
+                        // Removing an item
+                        System.out.println("Removing an item");
+                        int itemToRemove = getValidItem();
+                        store.removeItem(store.getItem(itemToRemove).getName());
+                        System.out.println("");
+
+                    } else if(userChoice == 6) {
                         store.permSort();
                         System.out.println("The items have been put in ");
-                    } else if(userChoice != 6) { // not 5 or 6
+                    } else if(userChoice != 7) { // sub menus are 1 - 3
                         curMenu = userChoice;
                     }
                     break;
@@ -255,6 +286,10 @@ public class Main {
                             for (int i = 0; i < receipt.size(); i++) {
                                 System.out.println(receipt.get(i));
                             }
+                            System.out.println("Sub total: $" + customerTot);
+                            System.out.println("Tax: $" + customerTot * (1-store.TAX_PERCENT));
+                            System.out.println("Total: $" + customerTot * store.TAX_PERCENT);
+
                             curMenu = 0;
                         }
 
