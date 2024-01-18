@@ -1,4 +1,6 @@
+import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 /**
  * @author Zachary Toye-Nakamura
@@ -22,33 +24,36 @@ public class Main {
         System.out.println("Then follow any following prompts.");
     }
 
-    public static void printMainMenu() {
-        System.out.println("1. Edit items."); // Note not every attribute can be changed, that would be fraud
-        System.out.println("2. Display information.");
-        System.out.println("3. Sell items.");
-        System.out.println("4. Add a item.");
-        System.out.println("5. Remove a item.");
-        System.out.println("6. Permanently sort the order of items.");
-        System.out.println("7. Exit the program.");
+    public static String printMainMenu() {
+        // Note not every attribute can be changed, that would be fraud
+        return  "1. Edit items.\n" +
+                "2. Display information.\n" +
+                "3. Sell items.\n" +
+                "4. Add a item.\n" +
+                "5. Remove a item.\n" +
+                "6. Permanently sort the order of items.\n" +
+                "7. Exit the program.\n";
     }
 
     /**
-     * Prints a sub menu for editing items
+     * Formats a string that is a sub menu for editing items
+     *
+     * @return  A formatted string of the sub menu for editing item to display to the user
      */
-    public static void printEditMenu() {
-        System.out.println("1. Edit 1 item."); // Then choose a property.
-        System.out.println("2. Edit all items.");
-        System.out.println("3. Go Back");
+    public static String printEditMenu() {
+        return "1. Edit 1 item.\n" + // Then choose a property.
+        "2. Edit all items.\n" +
+        "3. Go Back\n";
     }
 
     /**
-     * Prints the display information menu
+     * @return A formatted string for the display information menu to the user
      */
-    public static void printDisInfoMenu() {
-        System.out.println("1. Display information for 1 item.");
-        System.out.println("2. Display information for 1 category of items");
-        System.out.println("3. Display information for all items.");
-        System.out.println("4. Go back");
+    public static String printDisInfoMenu() {
+        return "1. Display information for 1 item.\n" +
+        "2. Display information for 1 category of items\n" +
+        "3. Display information for all items.\n" +
+        "4. Go back\n";
     }
 
     /**
@@ -74,24 +79,30 @@ public class Main {
     }
 
     /**
-     * Get a valid number from the user, it repeatedly asks them if they don't enter a
-     * 
-     * @param low The minimum number the user's input can be to be valid
-     * @param high The max number the user's input can be to be valid
+     * Get a valid integer from the user in a given range, it repeatedly asks them if they don't enter a "valid number".
+     *
+     * @param msg The message prompting the user to enter a number.
+     * @param errorMsg The error message the program displays upon invalid input, leave as "" for the default message.
+     * @param low The minimum number the user's input can be to be valid.
+     * @param high The max number the user's input can be to be valid.
      * @return A valid number between [low, high] inclusively, that the user inputted.
      */
-    public static int getMenuInput(int low, int high) {
+    public static int getValidInt(String msg, String errorMsg, int low, int high) {
         String userInput = "";
         while(true) {
             try {
-                System.out.print("> ");
+                System.out.print(msg);
                 userInput = input.nextLine();
                 int userChoice = Integer.parseInt(userInput);
                 if(userChoice >= low && userChoice <= high) {
                     return userChoice;
                 }
-            } catch(Exception excpt) {}
-            System.out.println("Invalid Input: Please enter a number between " + low + " and " + high);
+            } catch(Exception exception) {}
+            if(errorMsg.equals("")) {
+                System.out.println("Invalid Input: Please enter a number between " + low + " and " + high);
+            } else {
+                System.out.println(errorMsg);
+            }
         }
     }
 
@@ -120,9 +131,71 @@ public class Main {
         }
     }
 
+    /**
+     * Gets a valid price from the user. (It must be a non-negative double that fits in a double)
+     *
+     * @param msg The message displayed to the user prompting them to enter a value
+     * @return A non-negative double value that the user wants to set the price as.
+     */
+    public static double getValidPrice(String msg) {
+        double userInput;
+        while(true) {
+            try {
+                System.out.print(msg);
+                userInput = Double.parseDouble(input.nextLine());
+                if (userInput > 0) {
+                    return userInput;
+                }
+                System.out.println("Invalid Input: Please enter a non-negative number value.");
+            } catch(Exception exception) {
+                System.out.println("Invalid Input: Please enter a number value (double)!");
+            }
+        }
+    }
+
+    /**
+     * Gets a valid boolean from the user
+     *
+     * @param msg The message displayed to the user prompting them to enter a boolean
+     * @return The user's input (when finally correct).
+     */
+    public static boolean getValidBool(String msg) {
+        String userInput;
+        while(true) {
+            System.out.print(msg);
+            userInput = input.nextLine().toLowerCase();
+            if (userInput.equals("y") || userInput.equals("yes")) {
+                return true;
+            } else if (userInput.equals("n") || userInput.equals("no")) {
+                return false;
+            }
+            System.out.println("Invalid Input: Please enter yes(y) or no(n).");
+
+        }
+    }
+
+    /**
+     * Gets the expiration date from the user.
+     *
+     * @return The expiration date in unix
+     */
+    public static long getValidExpirationDate() {
+        int year = getValidInt("Enter the year the item expires in (Latest 2038): ",
+                "Please enter a valid year before 2038!",1970, 2038); // hoping they don't try to sell food from before 1970
+        int month = getValidInt("Enter the month the item expires in (Jan = 1, Dec = 12): ",
+                "Please enter a valid month! (between 1 and 12)",1,12);
+        // I'm not lazy uhhhh, just thinking smarter. | The number of days in a month
+        int daysInMonth = YearMonth.of(year, month).lengthOfMonth();
+        int day = getValidInt("Enter the day the item expires on:",
+                "Please enter a valid day! [1, " + daysInMonth + "]", 1, daysInMonth);
+        // Why -1900? I'm not sure but it works. I could probably do think myself with a little multiplication but nah.
+        return new Date(year - 1900, month, day, 0, 0, 0).getTime() / 1000L;
+    }
+
+
 
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+
 
         startUp();
         // The user's choice
@@ -138,16 +211,15 @@ public class Main {
             System.out.println(userChoice);
             switch (curMenu) {  
                 case 0:
-                    printMainMenu();
-                    userChoice = getMenuInput(1, 7);
+                    userChoice = getValidInt(printMainMenu() + "> ", "", 1, 7);
                     if(userChoice == 4) {
                         // Adding an item
-                        System.out.println("Which deparment is the item part of? ");
-                        System.out.println("1. Food");
-                        System.out.println("2. Clothing");
-                        System.out.println("3. Toys");
-                        System.out.println("4. None of the above");
-                        userChoice = getMenuInput(1, 4);
+                        System.out.println("Which department is the item part of? ");
+
+                        userChoice = getValidInt("1. Food\n" +
+                                                        "2. Clothing\n" +
+                                                        "3. Toys\n" +
+                                                        "4. None of the above\n> ", "",1, 4);
                         
                         System.out.print("Enter the name of the item: ");
                         String newItemName = input.nextLine();
@@ -155,12 +227,39 @@ public class Main {
                         String newItemDesc = input.nextLine();
                         System.out.print("Enter the ID of the item: ");
                         String newItemId = input.nextLine();
-                        System.out.print("Enter the manufactor/producer of the item: ");
+                        System.out.print("Enter the manufacturer/producer of the item: ");
                         String newItemBusiness = input.nextLine();
                         System.out.print("Enter the selling price of the item: ");
-                        String newItemPrice = input.nextLine();
+                        double newItemPrice = getValidPrice("Enter the selling price of the item: ");
                         System.out.print("Enter the price the store buys the item for: ");
-                        String newItemBuyPrice = input.nextLine();
+                        double newItemBuyPrice = getValidPrice("Enter the price the store buys the item for: ");
+                        // Store shouldn't need to stock more than 2^31-1 items, if they do uhhhhhh not my problem.
+                        int newItemRestockAmt = getValidInt("Enter the amount of item the store restocks: ",
+                                "Please enter a non-negative integer value!",0,2147483646);
+                        if(userChoice == 4) {
+                            store.addItem(new Item(newItemName,newItemDesc,newItemId,newItemBusiness,newItemPrice,
+                                    newItemBuyPrice,newItemRestockAmt));
+                        }
+                        if(userChoice == 1) {
+                            long expDate = getValidExpirationDate();
+                            boolean isVeg = getValidBool("Is it vegetarian: ");
+                            boolean isLiquid = getValidBool("Is the item liquid: ");
+                            boolean perGram = getValidBool("Is the item sold per pound: ");
+                            int amount;
+                            if(isLiquid) {
+                                amount = getValidInt("Enter the volume of the item received per purchase: ", "Please enter a non-negative integer!",0,Integer.MAX_VALUE);
+                            } else if(perGram) {
+                                amount = getValidInt("Enter the weight of the item received per purchase: ", "Please enter a non-negative integer!",0,Integer.MAX_VALUE);
+                            } else {
+                                amount = getValidInt("Enter number of units received per purchase: ", "Please enter a non-negative integer!",0,Integer.MAX_VALUE);
+                            }
+
+
+                        } else if(userChoice == 2) {
+
+                        } else if(userChoice == 3) {
+
+                        }
 
 
                     } if(userChoice == 5) {
@@ -179,8 +278,7 @@ public class Main {
                     break;
 
                 case 1:
-                    printEditMenu();
-                    userChoice = getMenuInput(1, 3);
+                    userChoice = getValidInt(printEditMenu() + "> " ,"", 1, 3);
                     if(userChoice == 3) { // go back
                         curMenu = 0; 
                     } else {
@@ -189,8 +287,7 @@ public class Main {
                     break;
 
                 case 2:
-                    printDisInfoMenu();
-                    userChoice = getMenuInput(1, 4);
+                    userChoice = getValidInt(printDisInfoMenu()+ "> ","",1, 4);
                     if(userChoice == 4) { // go back
                         curMenu = 0;
                         break;
@@ -248,13 +345,11 @@ public class Main {
                     userInput = "";
                     ArrayList<String> receipt = new ArrayList<>();
                     receipt.add("Sales transaction: ");
-                    double customerTot = 0;
+                    double totTaxed = 0; // total price of items that are taxed
+                    double totNotTaxed = 0; // Total price of items that aren't taxed
                     while(!userInput.equals("-1")) {
                         // Get user input
-                        System.out.println("1. Sell an item");
-                        System.out.println("2. Finish transaction");
-                        System.out.print("> ");
-                        userChoice = getMenuInput(1, 2);
+                        userChoice = getValidInt("1. Sell an item\n2. Finish transaction\n>","", 1, 2);
                         if(userChoice == 1) {
                             System.out.print("Enter the name or ID of the id being sold: ");
                             Item requestedItem = store.getItem(getValidItem());
@@ -278,7 +373,11 @@ public class Main {
                                 System.out.println("Error: Too many tried more items, than in stock");
                             } else {
                                 receipt.add(requestedItem.getName() + " x " + amountSold + " $" + cost);
-                                customerTot += cost;
+                                if(requestedItem.isTaxed()) {
+                                    totTaxed += cost;
+                                } else {
+                                    totNotTaxed += cost;
+                                }
                             }
                         }
                         if(userChoice == 2) {
@@ -286,9 +385,9 @@ public class Main {
                             for (int i = 0; i < receipt.size(); i++) {
                                 System.out.println(receipt.get(i));
                             }
-                            System.out.println("Sub total: $" + customerTot);
-                            System.out.println("Tax: $" + customerTot * (1-store.TAX_PERCENT));
-                            System.out.println("Total: $" + customerTot * store.TAX_PERCENT);
+                            System.out.println("Sub total: $" + totTaxed + totNotTaxed);
+                            System.out.println("Tax: $" + totTaxed * (1-store.TAX_PERCENT));
+                            System.out.println("Total: $" + totTaxed * store.TAX_PERCENT + totNotTaxed);
 
                             curMenu = 0;
                         }

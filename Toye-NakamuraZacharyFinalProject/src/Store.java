@@ -52,6 +52,14 @@ public class Store {
 
 
     /**
+     * Adds an item to the stores inventory.
+     * @param i The item to be added to the inventory
+     */
+    public void addItem(Item i) {
+        inventory.add(i);
+    }
+
+    /**
      * Removes an item from the inventory, (Note: This will remove it's profit)
      * This means that the store is no longer tracking anything related to the removed item.
      * 

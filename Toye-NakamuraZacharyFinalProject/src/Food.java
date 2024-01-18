@@ -23,19 +23,19 @@ public class Food extends Item{
      * @param expirationDate The date in unix time when the product expires, -1 for N/A.
      * @param isVegetarian If the food is vegetarian or not.
      * @param isLiquid If the food item is a liquid or not.
-     * @param amount How much the buyer gets with 1 purchase (in mL if isLiquid is true, in lbs if perPound is true)
+     * @param amount How much the buyer gets with 1 purchase (in mL if isLiquid is true, in lbs if perGram is true)
      *               otherwise it's per item.
-     * @param perPound If the amount is in pounds.
+     * @param perGram If the amount is in pounds.
      */
     public Food(String name, String description, String itemId, String business, double price, double buyPrice,
                 int restockAmt, long expirationDate, boolean isVegetarian, boolean isLiquid, double amount,
-                boolean perPound, boolean isTaxed) {
+                boolean perGram, boolean isTaxed) {
         super(name, description, itemId, business, price, buyPrice, restockAmt);
         this.expirationDate = expirationDate;
         this.isVegetarian = isVegetarian;
         this.isLiquid = isLiquid;
         this.amount = amount;
-        this.perPound = perPound;
+        this.perPound = perGram;
         this.isTaxed = isTaxed; // Most food products aren't taxed except candy
     }
 
@@ -98,8 +98,8 @@ public class Food extends Item{
     @Override
     public String toString() {
         // Always want the description last.
-        String units = " each";
-        if(perPound) units = " /" + amount + "lbs"; // prioritize per pound, but really both shouldn't be true at the same time.
+        String units = " for " + amount;
+        if(perPound) units = " /" + amount + "g"; // prioritize per pound, but really both shouldn't be true at the same time.
         else if(isLiquid) units = " /" + amount + "ml";
         return  "Name:  " + name + "\n" +
                 "Id:    " + itemId + "\n" +
