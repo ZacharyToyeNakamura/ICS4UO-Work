@@ -147,6 +147,31 @@ public class Item implements Comparable<Item> {
     }
 
     /**
+     * Sets the id of the item
+     * 
+     * @param id The item's new id
+     */
+    public void setId(String id) {
+        itemId = id;
+    }
+
+    /**
+     * Sets the producer/manufacturer of the item
+     * 
+     * @param business The new producer/manufacturer of the item.
+     */
+    public void setBusiness(String business) {
+        this.business = business;
+    }
+
+    /**
+     * @return The net profit on the item
+     */
+    public double getNetProfit() {
+        return netProfit;
+    }
+
+    /**
      * @return The department that the item is part of.
      */
     public String getDepartment() {
@@ -187,6 +212,7 @@ public class Item implements Comparable<Item> {
     public String shortInfo() {
         return name + ": " + itemId;
     }
+
 
 
     /**

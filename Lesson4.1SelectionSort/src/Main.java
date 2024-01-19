@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Main {
-    public static final int MN = (int)1e5; // ~3s for 1e5
+    public static final int MN = (int)1e7; // ~3s for 1e5
     // ~20s for 3e5
     // ~17s for 1e7 quicksort
-    public static final int high = 10000000;
-    public static final int low = -10000000;
+    public static final int high = 1000000000;
+    public static final int low = -1000000000;
     public static int smallest (int[] array) {
         int small = (int)0x3f3f3f3f;
         for (int i = 0; i < array.length; i++) {
@@ -324,28 +324,28 @@ public class Main {
         long startTime = System.currentTimeMillis();
 
 
-        inPlaceQuickSort(arr, 0, arr.length-1);
-        printArr(arr);
-        System.out.println("Time for inPlace quickSort: " + ((System.currentTimeMillis() - startTime)/1000.0) + " seconds");
+        // inPlaceQuickSort(arr, 0, arr.length-1);
+        // printArr(arr);
+        // System.out.println("Time for inPlace quickSort: " + ((System.currentTimeMillis() - startTime)/1000.0) + " seconds");
 
-        selectionSort(arr);
+        // selectionSort(arr);
 
-        startTime = System.currentTimeMillis();
-        arr2 = quickSort(arr2);
+        // startTime = System.currentTimeMillis();
+        // arr2 = quickSort(arr2);
 //        saveList(arr2);
-        System.out.println("Time for quickSort, original: \t\t" + ((System.currentTimeMillis() - startTime)/1000.0) + " seconds");
+        // System.out.println("Time for quickSort, original: \t\t" + ((System.currentTimeMillis() - startTime)/1000.0) + " seconds");
 
 //        arr3.clear();
 //        for (int i = 0; i < MN; i++) arr3.add((int)(Math.random()*(high - low + 1) + low));
-        startTime = System.currentTimeMillis();
-        arr3 = quickSort2(arr3, 20);
-//        saveList(arr3);
-        System.out.println("Time for quickSort2, cut off 20: \t" + ((System.currentTimeMillis() - startTime)/1000.0) + " seconds");
+//         startTime = System.currentTimeMillis();
+//         arr3 = quickSort2(arr3, 20);
+// //        saveList(arr3);
+//         System.out.println("Time for quickSort2, cut off 20: \t" + ((System.currentTimeMillis() - startTime)/1000.0) + " seconds");
 
-        startTime = System.currentTimeMillis();
-        arr4 = quickSort2(arr4, 8);
-//        saveList(arr4);
-        System.out.println("Time for quickSort2, cut off 8: \t" + ((System.currentTimeMillis() - startTime)/1000.0) + " seconds");
+//         startTime = System.currentTimeMillis();
+//         arr4 = quickSort2(arr4, 8);
+// //        saveList(arr4);
+//         System.out.println("Time for quickSort2, cut off 8: \t" + ((System.currentTimeMillis() - startTime)/1000.0) + " seconds");
 
         startTime = System.currentTimeMillis();
         mrChoQuickSort(arr5, 0, arr5.length - 1);

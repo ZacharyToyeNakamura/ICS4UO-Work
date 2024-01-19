@@ -53,7 +53,10 @@ public class Main {
         return "1. Display information for 1 item.\n" +
         "2. Display information for 1 category of items\n" +
         "3. Display information for all items.\n" +
-        "4. Go back\n";
+        "4. Display profit of 1 item\n" +
+        "5. Display net profits of all items\n" + 
+        "6. Display net profits of all items, from highest to lowest\n" + 
+        "7. Go back\n";
     }
 
     /**
@@ -61,21 +64,26 @@ public class Main {
      * item.
      * 
      * @param multi True if the user is editing multiple values, false if not.
+     * @return a nicely formatted string displaying info on editing items
      */
-    public static void printEditItem(boolean multi) {
-        System.out.print("1. Edit name of item");
+    public static String printEditItem(boolean multi) {
+        String output = "";
+        output += "1. Edit name of item";
         if(multi) {
-            System.out.print("s");
+            output += "s";
         } 
-        System.out.print("\n2. Edit ID of item");
+        output+="\n2. Edit ID of item"; // Shouldn't really be change but eh add flexability I guess.
         if(multi) {
-            System.out.print("s");
+            output += "s";
         } 
-        System.out.println("\n3. Edit the description.");
-        System.out.println("4. Edit the manufacturer/producer.");
-        System.out.println("5. Edit the sale price.");
-        System.out.println("6. Edit the buy price.");
-        System.out.println("7. Edit the restock amount.");
+        output += "\n3. Edit the description.\n";
+        output += "4. Edit the manufacturer/producer.\n";
+        output += "5. Edit the sale price.\n";
+        output += "6. Edit the buy price.\n";
+        output += "7. Edit stock amount.\n";
+        output += "8. Edit the restock amount.\n";
+        output += "9. Go Back\n";
+        return output;
     }
 
     /**
@@ -181,15 +189,82 @@ public class Main {
      */
     public static long getValidExpirationDate() {
         int year = getValidInt("Enter the year the item expires in (Latest 2038): ",
-                "Please enter a valid year before 2038!",1970, 2038); // hoping they don't try to sell food from before 1970
+                "Please enter a valid year between 2024 and 2038!",1970, 2038); // hoping they don't try to sell food from before 1970
         int month = getValidInt("Enter the month the item expires in (Jan = 1, Dec = 12): ",
                 "Please enter a valid month! (between 1 and 12)",1,12);
         // I'm not lazy uhhhh, just thinking smarter. | The number of days in a month
         int daysInMonth = YearMonth.of(year, month).lengthOfMonth();
-        int day = getValidInt("Enter the day the item expires on:",
+        int day = getValidInt("Enter the day the item expires on: ",
                 "Please enter a valid day! [1, " + daysInMonth + "]", 1, daysInMonth);
         // Why -1900? I'm not sure but it works. I could probably do think myself with a little multiplication but nah.
         return new Date(year - 1900, month, day, 0, 0, 0).getTime() / 1000L;
+    }
+
+
+    public static boolean compProfit(ArrayList<Item> inve, int a, int b) {
+        return Store.compByProfit(store.getItem(a), store.getItem(b));
+    }
+    /**
+     * A third implementation of quicksort, of some reason inplace quick sort preforms better (by a lot on large values)
+     * than using the stack. This sorts the list of items by net profit.
+     * 
+     * @param inve The array list that the algorithm is sorting
+     * @param low The left side in the array that is currently being sorted
+     * @param high The right side of the array that is currently being sorted
+     * @return The inventory of the store but sorted based on net profit of the items.
+     */
+    public static void quickSort3(ArrayList<Item> inve, int low, int high) {
+        // ArrayList<Item> inve = store.copyInventory();
+        if(high - low < 8) {
+            // run insertion sort
+            for(int i = low; i <= high; i++) {
+                for(int j = i; j > low; j--) {
+                    if(!Store.compByProfit(inve.get(j), inve.get(j-1))) { // push the element up until it's at a place where arr[j-1] > arr[j] > arr[j+1]
+                        Item temp = inve.get(j);
+                        inve.set(j, inve.get(j-1));
+                        inve.set(j-1,temp);
+                    }
+                    else { // rest of the array is sorted 
+                        break;
+                    }
+                }
+            }
+            return;
+        }
+
+        final int MOVING_LEFT = 0;
+        final int MOVING_RIGHT = 1;
+
+        if(low < high) {
+            int left = low;
+            int right = high;
+            // choose first element
+            double pivot = inve.get(low).getNetProfit();
+            Item pivItem = inve.get(low);
+            // init current direction
+            int currentDirection = MOVING_LEFT;
+
+            while(left < right) {
+                if(currentDirection == MOVING_LEFT) {
+                    while(inve.get(right).getNetProfit() >= pivot && left < right) {
+                        right--;
+                    }
+                    inve.set(left, inve.get(right));
+                    currentDirection = MOVING_RIGHT;
+                }
+                if(currentDirection == MOVING_RIGHT) {
+                    while(inve.get(left).getNetProfit() <= pivot && left < right) {
+                        left++;
+                    }
+                }
+                inve.set(right, inve.get(left));
+                currentDirection = MOVING_LEFT;
+            }
+            inve.set(left, pivItem);// or a[right] since they are equal?
+
+            quickSort3(inve, low, left - 1);
+            quickSort3(inve, right + 1, high);
+        }
     }
 
 
@@ -202,8 +277,10 @@ public class Main {
         int userChoice = -1;
         // Temp variable used to store user input
         String userInput = "";
+        // A temp variable use to store the item the user wants to change
+        Item userItem;
         // The current menu
-        // 0 is the main, 1 is edit items, 2 display info, 3 sell items, 4 is adding/deleting items
+        // 0 is the main, 1 is edit items, 2 display info, 3 sell items, 4 is not real
         // 5 which attribute is going to be edited (in edit items) but editing just 1 value.
         // 6 is the same as menu 4 but editing ALL items
         int curMenu = 0;
@@ -229,9 +306,7 @@ public class Main {
                         String newItemId = input.nextLine();
                         System.out.print("Enter the manufacturer/producer of the item: ");
                         String newItemBusiness = input.nextLine();
-                        System.out.print("Enter the selling price of the item: ");
                         double newItemPrice = getValidPrice("Enter the selling price of the item: ");
-                        System.out.print("Enter the price the store buys the item for: ");
                         double newItemBuyPrice = getValidPrice("Enter the price the store buys the item for: ");
                         // Store shouldn't need to stock more than 2^31-1 items, if they do uhhhhhh not my problem.
                         int newItemRestockAmt = getValidInt("Enter the amount of item the store restocks: ",
@@ -240,26 +315,49 @@ public class Main {
                             store.addItem(new Item(newItemName,newItemDesc,newItemId,newItemBusiness,newItemPrice,
                                     newItemBuyPrice,newItemRestockAmt));
                         }
-                        if(userChoice == 1) {
+                        if(userChoice == 1) { // food
                             long expDate = getValidExpirationDate();
-                            boolean isVeg = getValidBool("Is it vegetarian: ");
-                            boolean isLiquid = getValidBool("Is the item liquid: ");
-                            boolean perGram = getValidBool("Is the item sold per pound: ");
+                            boolean isVeg = getValidBool("Is it vegetarian (y/n): ");
+                            boolean isLiquid = getValidBool("Is the item liquid (y/n): ");
+                            boolean perGram = getValidBool("Is the item sold per gram (y/n): ");
                             int amount;
                             if(isLiquid) {
                                 amount = getValidInt("Enter the volume of the item received per purchase: ", "Please enter a non-negative integer!",0,Integer.MAX_VALUE);
                             } else if(perGram) {
-                                amount = getValidInt("Enter the weight of the item received per purchase: ", "Please enter a non-negative integer!",0,Integer.MAX_VALUE);
+                                amount = getValidInt("Enter the weight (in grams) of the item received per purchase: ", "Please enter a non-negative integer!",0,Integer.MAX_VALUE);
                             } else {
                                 amount = getValidInt("Enter number of units received per purchase: ", "Please enter a non-negative integer!",0,Integer.MAX_VALUE);
                             }
+                            boolean isTaxed = getValidBool("Is this food item taxed (y/n): ");
+                            store.addItem(new Food(newItemName,newItemDesc,newItemId,newItemBusiness,newItemPrice,
+                            newItemBuyPrice,newItemRestockAmt,expDate, isVeg, isLiquid, amount, perGram, isTaxed));
+                        } else if(userChoice == 2) { // clothing
+                            System.out.print("Enter the type of the clothing (ex. shorts, or t-shirt): ");
+                            String typeOfClothing = input.nextLine();
+                            System.out.println("Enter the size of the clothing (ex. S or XXL): ");
+                            String clothingSize = input.nextLine();
+                            System.out.println("Enter the fabric type of the clothing (ex. 100% Cotton): ");
+                            String fabricType = input.nextLine();
+                            System.out.println("Enter the color of the clothing: ");
+                            String color = input.nextLine();
+                            store.addItem(new Clothing(newItemName,newItemDesc,newItemId,newItemBusiness,newItemPrice,
+                            newItemBuyPrice,newItemRestockAmt,typeOfClothing,clothingSize,fabricType,color));
 
-
-                        } else if(userChoice == 2) {
-
-                        } else if(userChoice == 3) {
-
+                        } else if(userChoice == 3) { // toy
+                            System.out.println("Enter the material type (ex. plastic): ");
+                            String materialType = input.nextLine();
+                            System.out.print("Enter the age range of the toy (ex. 7+):");
+                            String ageRange = input.nextLine();
+                            System.out.print("Enter the number of players for the toy (ex 1-5 players):");
+                            String numPlayers = input.nextLine();
+                            System.out.print("Enter the dimesions of the toy (in the format <Weight> x <Length> x <Height>, <weight> grams): ");
+                            String dimesions = input.nextLine();
+                            store.addItem(new Toy(newItemName,newItemDesc,newItemId,newItemBusiness,newItemPrice,
+                            newItemBuyPrice,newItemRestockAmt,materialType,ageRange,numPlayers,dimesions));
                         }
+                        System.out.println("Added the new item. . .");
+                        curMenu = 0;
+                        userChoice = 0;
 
 
                     } if(userChoice == 5) {
@@ -287,8 +385,8 @@ public class Main {
                     break;
 
                 case 2:
-                    userChoice = getValidInt(printDisInfoMenu()+ "> ","",1, 4);
-                    if(userChoice == 4) { // go back
+                    userChoice = getValidInt(printDisInfoMenu()+ "> ","",1, 7);
+                    if(userChoice == 6) { // go back
                         curMenu = 0;
                         break;
                     }
@@ -331,6 +429,24 @@ public class Main {
                                 System.out.println(store.getItem(i));
                             }
                             break;
+                        case 4:
+                            userItem = store.getItem(getValidItem());
+                            System.out.println("The net profit on " + userItem.getName() + " is $" + String.format("%02d",userItem.getNetProfit()));
+                            break;
+
+                        case 5: 
+                            for(int i = 0; i < store.getInventorySize(); i++) {
+                                System.out.println("The net profit on " + store.getItem(i).getName() + " is $" + String.format("%.2f",store.getItem(i).getNetProfit()));
+                            }
+                            break;
+
+                        case 6:
+                            ArrayList<Item> inve = store.copyInventory();
+                            quickSort3(inve, 0, store.getInventorySize() - 1);
+                            for(int i = 0; i < inve.size(); i++) {
+                                System.out.println("The net profit on " + inve.get(i).getName() + " is $" + String.format("%.2f",inve.get(i).getNetProfit()));
+                            }
+                            break;
 
                         default:
                             System.out.println("Fatal Error: Should have never gotten here.\nError inside information menu");
@@ -353,7 +469,7 @@ public class Main {
                         if(userChoice == 1) {
                             System.out.print("Enter the name or ID of the id being sold: ");
                             Item requestedItem = store.getItem(getValidItem());
-                            int amountSold = -2;
+                            int amountSold = -2; 
                             try {
                                 System.out.println("There are " + requestedItem.getStockLeft() + " units of " + 
                                                     requestedItem.getName() + " left"); 
@@ -393,14 +509,81 @@ public class Main {
                         }
 
                     }
-                case 4:
-                    printEditItem(false);
-                     
-                    break;
 
 
                 case 5:
+                    // TODO
+                    // Editing 1 item
+                    userItem = store.getItem(getValidItem());
+                    userChoice = getValidInt(printEditItem(false), "", 1, 9);
+                    if(userChoice == 9) {
+                        curMenu = 0;
+                        break;
+                    }
+                    switch (userChoice) {
+                        case 1:
+                            System.out.print("Enter the new name for the item (enter nothing to cancel): ");
+                            userInput = input.nextLine();
+                            if(userInput == "") {
+                                continue;
+                            }
+                            userItem.setName(userInput);
+                            break;
+                            
+                        case 2:
+                            System.out.print("Enter the new ID for the item (enter nothing to cancel): ");
+                            userInput = input.nextLine();
+                            if(userInput == "") {
+                                continue;
+                            }
+                            userItem.setId(userInput);
+                            break;
+
+                        case 3:
+                            System.out.print("Enter the new description for the item (enter nothing to cancel): ");
+                            userInput = input.nextLine();
+                            if(userInput == "") {
+                                continue;
+                            }
+                            userItem.setDescription(userInput);
+                            break;
+                        
+                        case 4:
+                            System.out.print("Enter the new manufacturer/producer for the item (enter nothing to cancel): ");
+                            userInput = input.nextLine();
+                            if(userInput == "") {
+                                continue;
+                            }
+                            userItem.setBusiness(userInput);
+                            break;
+
+                        case 5:
+                            double newPrice = getValidPrice("Enter the new sale price for the item (current price is " + userItem.getPrice() + "): ");
+                            userItem.setPrice(newPrice);
+                            break;
+                        
+                        case 6:
+                            newPrice = getValidPrice("Enter the new buy price for the item (current buy price is " + userItem.getBuyPrice() + "): ");
+                            userItem.setBuyPrice(newPrice);
+                            break;
+
+                        case 7:
+                            int newStock = getValidInt("Enter the new amount of stock (No changes are made to profits): ", "Error: The amount of stock must be a non-negative integer value.", 0, Integer.MAX_VALUE);
+
+                        case 8:
+                            int newRestock = getValidInt("Enter the new restock amount: ", "Error: Please enter a non-negative value to restock.", 0, Integer.MAX_VALUE);
+                            userItem.setRestockAmt(newRestock);
+                            break;
+                            
+                        default:
+                            break;
+                    }
+                     
+
                     break;
+
+                case 6:
+                    // Editing all items
 
             
                 default:

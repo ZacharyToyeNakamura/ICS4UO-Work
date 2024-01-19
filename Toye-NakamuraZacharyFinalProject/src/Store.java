@@ -26,7 +26,7 @@ public class Store {
     /**
      * Initializes the array list and creates a store object
      */
-    public Store() {
+    public Store() { 
         inventory = new ArrayList<>();
     }
 
@@ -35,6 +35,13 @@ public class Store {
      */
     public int getInventorySize() {
         return inventory.size();
+    }
+
+    /**
+     * @return A copy of the store's inventory
+     */
+    public ArrayList<Item> copyInventory() {
+        return new ArrayList<>(inventory);
     }
 
     /**
@@ -411,7 +418,19 @@ public class Store {
 
     }
 
-    
+    /**
+     * Compares 2 items based on net profit
+     * 
+     * @param i The first item to be compared
+     * @param i2 The second item to be compared
+     * @return True if i has a higher (or equal) profit compared to i2, otherwise false.
+     */
+    public static boolean compByProfit(Item i, Item i2) {
+        if(i.getNetProfit() >= i2.getNetProfit()) {
+            return true;
+        }
+        return false;
+    }    
 
     
 
