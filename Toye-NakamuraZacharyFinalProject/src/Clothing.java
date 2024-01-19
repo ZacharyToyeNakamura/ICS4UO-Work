@@ -1,3 +1,6 @@
+/**
+ * This class
+ */
 public class Clothing extends Item {
     private String type;
     private String size;
