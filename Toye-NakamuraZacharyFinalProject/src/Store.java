@@ -368,7 +368,7 @@ public class Store {
      */
     public int findItem(String nameOrId) {
         for (int i = 0; i < inventory.size(); i++) {
-            if(inventory.get(i).getName() == nameOrId || inventory.get(i).getItemId() == nameOrId) return i;
+            if(inventory.get(i).getName().equals(nameOrId) || inventory.get(i).getItemId().equals(nameOrId)) return i;
         }
         return -1;
     }

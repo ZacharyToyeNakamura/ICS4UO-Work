@@ -87,6 +87,13 @@ public class Item implements Comparable<Item> {
     }
 
     /**
+     * @return The restock amount for the item
+     */
+    public int getRestockAmt() {
+        return restockAmt;
+    }
+
+    /**
      * @return If the item is taxed or not.
      */
     public boolean isTaxed() {
