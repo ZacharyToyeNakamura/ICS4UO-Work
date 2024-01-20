@@ -30,6 +30,42 @@ public class Clothing extends Item {
     }
 
     /**
+     * Sets the type of clothing (Shouldn't really be used because the type of clothing doesn't change)
+     *
+     * @param type The new type of clothing
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    /**
+     * Sets the size of clothing (Shouldn't really be used because the type of clothing doesn't change)
+     *
+     * @param size The new size of the clothing
+     */
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    /**
+     * Sets the fabric type of the clothing (Shouldn't really be used because the type of clothing doesn't change)
+     *
+     * @param fabricType The new fabric of the clothing
+     */
+    public void setFabricType(String fabricType) {
+        this.fabricType = fabricType;
+    }
+
+    /**
+     * Sets the color of the clothing (Shouldn't really be used because the type of clothing doesn't change)
+     *
+     * @param color The new color of the clothing
+     */
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    /**
      * @return The type of the clothing
      */
     public String getType() {

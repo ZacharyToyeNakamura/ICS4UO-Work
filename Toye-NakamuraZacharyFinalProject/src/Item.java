@@ -16,7 +16,7 @@ public class Item implements Comparable<Item> {
     protected double netProfit; // The net profit made off the item so far.
 
     protected boolean isTaxed; // If the item is taxed or not.
-    public final int INF = (int)0x3f3f3f3f; // A return value for invalid
+    public final static int INF = (int)0x3f3f3f3f; // A return value for invalid
     
 
     /**
@@ -209,8 +209,8 @@ public class Item implements Comparable<Item> {
      */
     public void restock() {
         if(stockLeft >= restockAmt) return;
-        stockLeft = restockAmt;
         netProfit -= (restockAmt - stockLeft) * buyPrice;
+        stockLeft = restockAmt;
     }
 
     /**

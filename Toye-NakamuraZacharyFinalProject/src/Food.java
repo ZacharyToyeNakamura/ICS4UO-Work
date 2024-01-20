@@ -10,7 +10,7 @@ public class Food extends Item{
     private boolean isVegetarian; // If the product is vegetarian or not.
     private boolean isLiquid; // If the product is a liquid or not.
     private double amount; // How much you get per purchase ex 100g or 1 apple.
-    private boolean perPound; // If the product is purchased per pound.
+    private boolean perGram; // If the product is purchased per pound.
     /**
      * Creates a food item, with all of its parameters.
      *
@@ -35,8 +35,58 @@ public class Food extends Item{
         this.isVegetarian = isVegetarian;
         this.isLiquid = isLiquid;
         this.amount = amount;
-        this.perPound = perGram;
+        this.perGram = perGram;
         this.isTaxed = isTaxed; // Most food products aren't taxed except candy
+    }
+
+    /**
+     * @return the amount of the item the customer gets in 1 purchase
+     */
+    public double getAmount() {
+        return amount;
+    }
+
+    /**
+     * @return If the food is sold per gram.
+     */
+    public boolean isPerGram() {
+        return perGram;
+    }
+
+    /**
+     * Sets if the food is vegetarian or not.
+     *
+     * @param vegetarian True if the food is vegetarian. otherwise false
+     */
+    public void setVegetarian(boolean vegetarian) {
+        isVegetarian = vegetarian;
+    }
+
+    /**
+     * Sets if the food is a liquid or not
+     *
+     * @param liquid True if the food is a liquid otherwise false.
+     */
+    public void setLiquid(boolean liquid) {
+        isLiquid = liquid;
+    }
+
+    /**
+     * Sets the amount the customer gets per purchase
+     *
+     * @param amount The new amount the customer gets per purchase
+     */
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    /**
+     * Sets whether the food is sold per gram or not
+     *
+     * @param perGram If the food is sold per gram or not.
+     */
+    public void setPerGram(boolean perGram) {
+        this.perGram = perGram;
     }
 
     /**
@@ -99,7 +149,7 @@ public class Food extends Item{
     public String toString() {
         // Always want the description last.
         String units = " for " + amount;
-        if(perPound) units = " /" + amount + "g"; // prioritize per pound, but really both shouldn't be true at the same time.
+        if(perGram) units = " /" + amount + "g"; // prioritize per pound, but really both shouldn't be true at the same time.
         else if(isLiquid) units = " /" + amount + "ml";
         return  "Name:  " + name + "\n" +
                 "Id:    " + itemId + "\n" +

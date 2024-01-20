@@ -26,6 +26,9 @@ public class Main {
 
     public static String printMainMenu() {
         // Note not every attribute can be changed, that would be fraud
+        // List of all unchangable fields
+        // - Expiration Date (that should DEFINITELY NEVER CHANGE)
+        // - There are other field that shouldn't change but it will allow for easy updates (Ex. out of S shirts but L is in stock, change the size to L)
         return  "1. Edit items.\n" +
                 "2. Display information.\n" +
                 "3. Sell items.\n" +
@@ -269,7 +272,7 @@ public class Main {
     }
 
 
-
+    public static String defaultPath = "src/";
     public static void main(String[] args) {
         startUp();
         // The user's choice
@@ -363,8 +366,10 @@ public class Main {
                         // Removing an item
                         System.out.println("Removing an item");
                         int itemToRemove = getValidItem();
-                        store.removeItem(store.getItem(itemToRemove).getName());
-                        System.out.println("");
+                        if(!store.removeItem(store.getItem(itemToRemove).getName())) {
+                            System.out.println("An error has occurred while trying to remove an item");
+                        }
+                        System.out.println();
 
                     } else if(userChoice == 6) {
                         store.permSort();
@@ -463,12 +468,20 @@ public class Main {
                         case 6:
                             ArrayList<Item> inve = store.copyInventory();
                             quickSort3(inve, 0, store.getInventorySize() - 1);
+                            double totNProfit = 0;
                             for(int i = 0; i < inve.size(); i++) {
+
+                                totNProfit += inve.get(i).getNetProfit();
                                 if(store.getItem(i).getNetProfit() < 0)  {
-                                    System.out.println("The net profit on " + inve.get(i).getName() + " is -$" + String.format("%02d",Math.abs(inve.get(i).getNetProfit())));
+                                    System.out.println("The net profit on " + inve.get(i).getName() + " is -$" + String.format("%.2f",Math.abs(inve.get(i).getNetProfit())));
                                 } else {
-                                    System.out.println("The net profit on " + inve.get(i).getName() + " is $" + String.format("%02d",inve.get(i).getNetProfit()));
+                                    System.out.println("The net profit on " + inve.get(i).getName() + " is $" + String.format("%.2f",inve.get(i).getNetProfit()));
                                 }
+                            }
+                            if(totNProfit < 0)  {
+                                System.out.println("The store's net profit is -$" + String.format("%.2f",Math.abs(totNProfit)));
+                            } else {
+                                System.out.println("The store's net profit is $" + String.format("%.2f",totNProfit));
                             }
                             break;
 

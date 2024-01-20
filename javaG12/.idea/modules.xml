@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/A3 Class Creation/A3 Class Creation.iml" filepath="$PROJECT_DIR$/A3 Class Creation/A3 Class Creation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Circles/Circles.iml" filepath="$PROJECT_DIR$/Circles/Circles.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ClassDemo/ClassDemo.iml" filepath="$PROJECT_DIR$/ClassDemo/ClassDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ClassesDemo/ClassesDemo.iml" filepath="$PROJECT_DIR$/ClassesDemo/ClassesDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Exercise5.2AbstractClasses/Exercise5.2AbstractClasses.iml" filepath="$PROJECT_DIR$/Exercise5.2AbstractClasses/Exercise5.2AbstractClasses.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Exercises1.1Arrays/Exercises1.1Arrays.iml" filepath="$PROJECT_DIR$/Exercises1.1Arrays/Exercises1.1Arrays.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Exercises1.2HigherDimensionalArrays/Exercises1.2HigherDimensionalArrays.iml" filepath="$PROJECT_DIR$/Exercises1.2HigherDimensionalArrays/Exercises1.2HigherDimensionalArrays.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Exercises1.3ArrayList/Exercises1.3ArrayList.iml" filepath="$PROJECT_DIR$/Exercises1.3ArrayList/Exercises1.3ArrayList.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Exercises3.1FileReading/Exercises3.1FileReading.iml" filepath="$PROJECT_DIR$/Exercises3.1FileReading/Exercises3.1FileReading.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Exercises3.2WritingToFile/Exercises3.2WritingToFile.iml" filepath="$PROJECT_DIR$/Exercises3.2WritingToFile/Exercises3.2WritingToFile.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Exercises4.5Recursion/Exercises4.5Recursion.iml" filepath="$PROJECT_DIR$/Exercises4.5Recursion/Exercises4.5Recursion.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Exercises5.1Inheritance/Exercises5.1Inheritance.iml" filepath="$PROJECT_DIR$/Exercises5.1Inheritance/Exercises5.1Inheritance.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Exercises5.3InterfacesComparable/Exercises5.3InterfacesComparable.iml" filepath="$PROJECT_DIR$/Exercises5.3InterfacesComparable/Exercises5.3InterfacesComparable.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FileReadingDemo/FileReadingDemo.iml" filepath="$PROJECT_DIR$/FileReadingDemo/FileReadingDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FileWritingDemo/FileWritingDemo.iml" filepath="$PROJECT_DIR$/FileWritingDemo/FileWritingDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Fractions/Fractions.iml" filepath="$PROJECT_DIR$/Fractions/Fractions.iml" />
+      <module fileurl="file://$PROJECT_DIR$/InheritanceDemo/InheritanceDemo.iml" filepath="$PROJECT_DIR$/InheritanceDemo/InheritanceDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Lesson4.1SelectionSort/Lesson4.1SelectionSort.iml" filepath="$PROJECT_DIR$/Lesson4.1SelectionSort/Lesson4.1SelectionSort.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Lesson4.2LinearSearch/Lesson4.2LinearSearch.iml" filepath="$PROJECT_DIR$/Lesson4.2LinearSearch/Lesson4.2LinearSearch.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Lesson4.4BubbleSortInsertionSort/Lesson4.4BubbleSortInsertionSort.iml" filepath="$PROJECT_DIR$/Lesson4.4BubbleSortInsertionSort/Lesson4.4BubbleSortInsertionSort.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MoreRecursion/MoreRecursion.iml" filepath="$PROJECT_DIR$/MoreRecursion/MoreRecursion.iml" />
+      <module fileurl="file://$PROJECT_DIR$/StudentHumanResources/StudentHumanResources.iml" filepath="$PROJECT_DIR$/StudentHumanResources/StudentHumanResources.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Toye-NakamuraZacharyBook/Toye-NakamuraZacharyBook.iml" filepath="$PROJECT_DIR$/Toye-NakamuraZacharyBook/Toye-NakamuraZacharyBook.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Toye-NakamuraZacharyComplex/Toye-NakamuraZacharyComplex.iml" filepath="$PROJECT_DIR$/Toye-NakamuraZacharyComplex/Toye-NakamuraZacharyComplex.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Toye-NakamuraZacharyFinalProject/Toye-NakamuraZacharyFinalProject.iml" filepath="$PROJECT_DIR$/Toye-NakamuraZacharyFinalProject/Toye-NakamuraZacharyFinalProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Toye-NakamuraZacharyGradeBook/Toye-NakamuraZacharyGradeBook.iml" filepath="$PROJECT_DIR$/Toye-NakamuraZacharyGradeBook/Toye-NakamuraZacharyGradeBook.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Toye-NakamuraZacharyMarks/Toye-NakamuraZacharyMarks.iml" filepath="$PROJECT_DIR$/Toye-NakamuraZacharyMarks/Toye-NakamuraZacharyMarks.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Toye-NakamuraZacharyPayroll/Toye-NakamuraZacharyPayroll.iml" filepath="$PROJECT_DIR$/Toye-NakamuraZacharyPayroll/Toye-NakamuraZacharyPayroll.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Toye-NakamuraZacharyPractice/Toye-NakamuraZacharyPractice.iml" filepath="$PROJECT_DIR$/Toye-NakamuraZacharyPractice/Toye-NakamuraZacharyPractice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/itUntitled/itUntitled.iml" filepath="$PROJECT_DIR$/itUntitled/itUntitled.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/javaG12.iml" filepath="$PROJECT_DIR$/.idea/javaG12.iml" />
+      <module fileurl="file://$PROJECT_DIR$/practiceDocumentation/practiceDocumentation.iml" filepath="$PROJECT_DIR$/practiceDocumentation/practiceDocumentation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/testingColors/testingColors.iml" filepath="$PROJECT_DIR$/testingColors/testingColors.iml" />
+    </modules>
+  </component>
+</project>
